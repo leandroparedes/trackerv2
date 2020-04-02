@@ -43,7 +43,7 @@ export default {
                     bodyFontSize: 14,
                     callbacks: {
                         label: function (tooltipItem, data) {
-                            return ' ' + data.datasets[tooltipItem.datasetIndex].label + ': ' + Intl.NumberFormat('de-DE').format(tooltipItem.yLabel);
+                            return ' ' + data.datasets[tooltipItem.datasetIndex].label + ': ' + Intl.NumberFormat().format(tooltipItem.yLabel);
                         }
                     }
                 },
