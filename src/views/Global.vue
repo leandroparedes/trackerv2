@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="global.loaded">
         <div class="text-center">
             <div class="display-2 font-weight-black">GLOBAL</div>
             <div class="title error--text mt-4">Affected countries: {{ global.totals.affectedCountries }}</div>

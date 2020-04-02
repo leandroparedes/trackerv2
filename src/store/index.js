@@ -8,7 +8,7 @@ export default new Vuex.Store({
     plugins: [createPersistedState()],
     state: {
         global: {
-            loading: false,
+            loaded: false,
             totals: {},
             historical: {}
         },
@@ -18,8 +18,8 @@ export default new Vuex.Store({
         }
     },
     mutations: {
-        set_global_loading (state, loading) {
-            state.global.loading = loading;
+        set_global_loaded (state, loaded) {
+            state.global.loaded = loaded;
         },
         set_global_totals (state, totals) {
             state.global.totals = totals;
@@ -37,7 +37,7 @@ export default new Vuex.Store({
     },
     actions: {
         fetch_global_data ({commit}) {
-            commit('set_global_loading', true);
+            commit('set_global_loaded', false);
 
             const totalsUrl = Vue.axios.get('https://corona.lmao.ninja/all');
             const historicalUrl = Vue.axios.get('https://corona.lmao.ninja/v2/historical/all');
@@ -46,7 +46,7 @@ export default new Vuex.Store({
                 commit('set_global_totals', totals.data);
                 commit('set_global_historical', historical.data);
             })).finally(() => {
-                commit('set_global_loading', false);
+                commit('set_global_loaded', true);
             });
         },
 
