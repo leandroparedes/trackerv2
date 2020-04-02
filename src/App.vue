@@ -12,8 +12,9 @@
             <v-btn icon large to="/compare">
                 <v-icon>fas fa-chart-bar</v-icon>
             </v-btn>
+        </v-app-bar>
         <v-content>
-            <v-container>
+            <v-container class="mt-4">
                 <router-view :key="$route.fullPath"></router-view>
             </v-container>
         </v-content>
