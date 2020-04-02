@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="loaded">
         <div class="text-center">
             <div class="display-2 font-weight-black">
                 <v-avatar size="42" class="mb-2 mr-2">
@@ -77,7 +77,7 @@ export default {
 
     data: function () {
         return {
-            loading: false,
+            loaded: false,
             country: {
                 info: {},
                 historical: {}
@@ -86,7 +86,7 @@ export default {
     },
 
     mounted () {
-        this.loading = true;
+        this.loaded = false;
 
         const countryCode = this.$route.params.countryCode;
         const infoUrl = this.axios.get(`https://corona.lmao.ninja/countries/${countryCode}`);
@@ -95,7 +95,7 @@ export default {
         this.axios.all([infoUrl, historicalUrl]).then(this.axios.spread((info, historical) => {
             this.country.info = info.data;
             this.country.historical = historical.data;
-        })).finally(() => this.loading = false);
+        })).finally(() => this.loaded = true);
     },
 
     computed: {
