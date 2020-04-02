@@ -90,8 +90,8 @@ export default {
                 label: 'Cases',
                 data: Object.values(this.global.historical.cases),
                 fill: false,
-                borderColor: '#424242',
-                pointBackgroundColor: '#424242',
+                borderColor: '#707070',
+                pointBackgroundColor: '#707070',
             });
 
             chartData.datasets.push({

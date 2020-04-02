@@ -108,8 +108,8 @@ export default {
                 label: 'Cases',
                 data: Object.values(this.country.historical.timeline.cases),
                 fill: false,
-                borderColor: '#2196f3',
-                pointBackgroundColor: '#2196f3',
+                borderColor: '#707070',
+                pointBackgroundColor: '#707070',
             });
 
             chartData.datasets.push({
