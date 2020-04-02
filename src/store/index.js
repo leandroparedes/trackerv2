@@ -13,7 +13,7 @@ export default new Vuex.Store({
             historical: {}
         },
         countries: {
-            loading: false,
+            loaded: false,
             data: []
         }
     },
@@ -28,8 +28,8 @@ export default new Vuex.Store({
             state.global.historical = historical;
         },
 
-        set_countries_loading (state, loading) {
-            state.countries.loading = loading;
+        set_countries_loaded (state, loaded) {
+            state.countries.loaded = loaded;
         },
         set_countries_data (state, data) {
             state.countries.data = data;
@@ -51,14 +51,14 @@ export default new Vuex.Store({
         },
 
         fetch_countries_data ({commit}) {
-            commit('set_countries_loading', true);
+            commit('set_countries_loaded', false);
 
             const countriesUrl = 'https://corona.lmao.ninja/countries';
 
             Vue.axios.get(countriesUrl).then(res => {
                 commit('set_countries_data', res.data);
             }).finally(() => {
-                commit('set_countries_loading', false);
+                commit('set_countries_loaded', true);
             });
         }
     },
