@@ -24,7 +24,7 @@ export default {
                 maintainAspectRatio: false,
                 elements: {
                     point: {
-                        radius: 2
+                        radius: 1
                     }
                 },
                 hover: {
