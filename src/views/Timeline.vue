@@ -1,41 +1,43 @@
 <template>
-    <div v-if="! loading">
+    <div>
         <div class="text-center">
             <div class="display-2 font-weight-black">TIMELINE</div>
         </div>
 
-        <v-timeline
-            :dense="$vuetify.breakpoint.mdAndDown"
-            class="mt-8"
-        >
-            <v-timeline-item
-                v-for="(situation, index) in situations.data"
-                :key="index"
+        <div v-if="! loading">
+            <v-timeline
+                :dense="$vuetify.breakpoint.mdAndDown"
+                class="mt-8"
             >
-                <template v-slot:opposite>
-                    <highlights :highlights="situation.highlights"></highlights>
-                </template>
-                <situation-card :situation="situation"></situation-card>
-            </v-timeline-item>
-        </v-timeline>
+                <v-timeline-item
+                    v-for="(situation, index) in situations.data"
+                    :key="index"
+                >
+                    <template v-slot:opposite>
+                        <highlights :highlights="situation.highlights"></highlights>
+                    </template>
+                    <situation-card :situation="situation"></situation-card>
+                </v-timeline-item>
+            </v-timeline>
 
-        <div
-            v-if="situations.links && situations.links.next"
-            class="text-center"
-        >
-            <v-btn
-                @click="loadMore"
-                :loading="loadingMore"
-                text
-                x-large
+            <div
+                v-if="situations.links && situations.links.next"
+                class="text-center"
             >
-                Load more
-            </v-btn>
+                <v-btn
+                    @click="loadMore"
+                    :loading="loadingMore"
+                    text
+                    x-large
+                >
+                    Load more
+                </v-btn>
+            </div>
+        </div>
+        <div v-else class="text-center mt-12">
+            <v-progress-circular indeterminate size="48"></v-progress-circular>
         </div>
     </div>
-    <v-overlay v-else :value="loading">
-        <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
 </template>
 
 <script>
