@@ -23,6 +23,7 @@
                 >
                     <info-card @click.native="view(country.countryInfo.iso2)" style="cursor: pointer">
                         <template v-slot:title>{{ country.country }}</template>
+                        <template v-slot:subtitle>Cases</template>
                         <template v-slot:count-total>{{ country.cases | formatNumber }}</template>
                         <template v-slot:count-today>+{{ country.todayCases | formatNumber }}</template>
                     </info-card>
