@@ -15,6 +15,11 @@ export default new Vuex.Store({
         countries: {
             loaded: false,
             data: null
+        },
+
+        timeline: {
+            loaded: false,
+            data: null
         }
     },
     mutations: {
@@ -33,6 +38,13 @@ export default new Vuex.Store({
         },
         set_countries_data (state, data) {
             state.countries.data = data;
+        },
+
+        set_timeline_loaded (state, loaded) {
+            state.timeline.loaded = loaded;
+        },
+        set_timeline_data (state, data) {
+            state.timeline.data = data;
         }
     },
     actions: {
@@ -59,6 +71,18 @@ export default new Vuex.Store({
                 commit('set_countries_data', res.data);
             }).finally(() => {
                 commit('set_countries_loaded', true);
+            });
+        },
+
+        fetch_timeline_data ({commit}) {
+            commit('set_timeline_loaded', false);
+
+            const timelineUrl = 'https://covid-situations.herokuapp.com/v1/situations';
+
+            Vue.axios.get(timelineUrl).then(res => {
+                commit('set_timeline_data', res.data);
+            }).finally(() => {
+                commit('set_timeline_loaded', true);
             });
         }
     },

@@ -13,6 +13,10 @@
                 <v-icon>fas fa-chart-bar</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
+            <v-btn icon large to="/timeline">
+                <v-icon>fas fa-stream</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
             <v-btn icon large to="/settings">
                 <v-icon>fas fa-cog</v-icon>
             </v-btn>

@@ -5,6 +5,7 @@ import Search from '@/views/Search.vue';
 import ViewCountry from '@/views/ViewCountry.vue';
 import Compare from '@/views/Compare.vue';
 import Settings from '@/views/Settings.vue';
+import Timeline from '@/views/Timeline.vue';
 
 Vue.use(VueRouter);
 
@@ -42,6 +43,12 @@ const routes = [
         name: 'Settings',
         component: Settings,
         meta: { title: 'Settings' }
+    },
+    {
+        path: '/timeline',
+        name: 'Timeline',
+        component: Timeline,
+        meta: { title: 'Timeline' }
     }
 ];
 
