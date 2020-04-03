@@ -14,7 +14,12 @@
                     <template v-slot:title>Cases</template>
                     <template v-slot:icon>fas fa-globe-americas</template>
                     <template v-slot:count-total>{{ country.info.cases | formatNumber }}</template>
-                    <template v-slot:count-today>+{{ country.info.todayCases | formatNumber }}</template>
+                    <template
+                        v-if="country.info.todayCases"
+                        v-slot:count-today
+                    >
+                        +{{ country.info.todayCases | formatNumber }}
+                    </template>
                 </info-card>
             </v-col>
 
@@ -39,7 +44,12 @@
                     <template v-slot:title>Deaths</template>
                     <template v-slot:icon>fas fa-skull-crossbones</template>
                     <template v-slot:count-total>{{ country.info.deaths | formatNumber }}</template>
-                    <template v-slot:count-today>+{{ country.info.todayDeaths | formatNumber }}</template>
+                    <template
+                        v-if="country.info.todayDeaths"
+                        v-slot:count-today
+                    >
+                        +{{ country.info.todayDeaths | formatNumber }}
+                    </template>
                 </info-card>
             </v-col>
         </v-row>
