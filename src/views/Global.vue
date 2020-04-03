@@ -54,6 +54,25 @@
             </v-col>
         </v-row>
 
+        <div class="headline font-weight-black mt-8 mb-2 text-uppercase">
+            Most affected countries
+        </div>
+
+        <v-row v-if="mostAffectedCountries.length" class="mb-8">
+            <v-col
+                cols="12" sm="6" md="3"
+                v-for="(country, index) in mostAffectedCountries"
+                :key="index"
+            >
+                <info-card @click.native="view(country.countryInfo.iso2)" style="cursor: pointer">
+                    <template v-slot:title>{{ country.country }}</template>
+                    <template v-slot:subtitle>Cases</template>
+                    <template v-slot:count-total>{{ country.cases | formatNumber }}</template>
+                    <template v-slot:count-today>+{{ country.todayCases | formatNumber }}</template>
+                </info-card>
+            </v-col>
+        </v-row>
+
         <div class="text-center mt-4 mb-8">
             <div class="primary--text">Last updated</div>
             <div class="grey--text">{{ new Date(global.totals.updated) }}</div>
@@ -62,7 +81,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import InfoCard from '@/components/InfoCard.vue';
 import HistoricalChart from '@/components/HistoricalChart.vue';
 
@@ -76,10 +95,22 @@ export default {
 
     mounted () {
         this.$store.dispatch('fetch_global_data');
+        this.$store.dispatch('fetch_countries_data');
+    },
+
+    methods: {
+        view: function (countryCode) {
+            this.$router.push({
+                name: 'ViewCountry',
+                params: { countryCode: countryCode }
+            });
+        }
     },
 
     computed: {
         ...mapState(['global']),
+
+        ...mapGetters(['mostAffectedCountries']),
 
         historicalData: function () {
             let chartData = { labels: null, datasets: [] };
