@@ -1,5 +1,5 @@
 <template>
-    <div v-if="timeline.loaded">
+    <div v-if="! loading">
         <div class="text-center">
             <div class="display-2 font-weight-black">TIMELINE</div>
         </div>
@@ -9,7 +9,7 @@
             class="mt-8"
         >
             <v-timeline-item
-                v-for="(situation, index) in timeline.data"
+                v-for="(situation, index) in situations.data"
                 :key="index"
             >
                 <template v-slot:opposite>
@@ -18,8 +18,22 @@
                 <situation-card :situation="situation"></situation-card>
             </v-timeline-item>
         </v-timeline>
+
+        <div
+            v-if="situations.links && situations.links.next"
+            class="text-center"
+        >
+            <v-btn
+                @click="loadMore"
+                :loading="loadingMore"
+                text
+                x-large
+            >
+                Load more
+            </v-btn>
+        </div>
     </div>
-    <v-overlay v-else :value="! timeline.loaded">
+    <v-overlay v-else :value="loading">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
 </template>
@@ -34,12 +48,35 @@ export default {
 
     components: { SituationCard, Highlights },
 
-    mounted () {
-        this.$store.dispatch('fetch_timeline_data');
+    data: function () {
+        return {
+            loading: false,
+            situations: [],
+            loadingMore: false
+        }
     },
 
-    computed: {
-        ...mapState(['timeline'])
+    mounted () {
+        this.loading = true;
+
+        const url = 'https://covid-situations.herokuapp.com/v1/situations?page=1&perPage=10';
+
+        this.axios.get(url).then(res => {
+            this.situations = res.data;
+        }).finally(() => this.loading = false);
+    },
+
+    methods: {
+        loadMore: async function () {
+            this.loadingMore = true;
+
+            this.axios.get(this.situations.links.next).then(res => {
+                res.data.data.map(situation => {
+                    this.situations.data.push(situation);
+                });
+                this.situations.links.next = res.data.links.next;
+            }).finally(() => this.loadingMore = false);
+        },
     }
 }
 </script>
