@@ -57,7 +57,7 @@
         <v-row>
             <v-col cols="12" lg="6">
                 <v-card class="pa-4">
-                    <div class="title pb-2">Exponential</div>
+                    <div class="title pb-2">Linear</div>
                     <historical-chart :chart-data="historicalData" type="linear"></historical-chart>
                 </v-card>
             </v-col>
