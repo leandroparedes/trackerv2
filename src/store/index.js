@@ -14,7 +14,7 @@ export default new Vuex.Store({
         },
         countries: {
             loaded: false,
-            data: []
+            data: null
         }
     },
     mutations: {
@@ -50,18 +50,26 @@ export default new Vuex.Store({
             });
         },
 
-        fetch_countries_data ({commit}) {
+        fetch_countries_data ({commit, state}) {
             commit('set_countries_loaded', false);
 
-            const countriesUrl = 'https://corona.lmao.ninja/countries';
+            if (state.countries.data === null) {
+                const countriesUrl = 'https://corona.lmao.ninja/countries';
 
-            Vue.axios.get(countriesUrl).then(res => {
-                commit('set_countries_data', res.data);
-            }).finally(() => {
+                Vue.axios.get(countriesUrl).then(res => {
+                    commit('set_countries_data', res.data);
+                }).finally(() => {
+                    commit('set_countries_loaded', true);
+                });
+            } else {
                 commit('set_countries_loaded', true);
-            });
+            }
         }
     },
-    modules: {
+    getters: {
+        mostAffectedCountries: function (state) {
+            return Object.values(state.countries.data)
+                        .sort((a, b) => b.cases - a.cases).slice(0, 4);
+        }
     }
 });
