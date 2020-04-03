@@ -79,7 +79,7 @@
         </v-row>
 
         <div class="text-center mt-4 mb-8">
-            <div class="primary--text">Last updated</div>
+            <div class="primary--text mb-1">Last updated {{ global.totals.updated | moment('from', 'now') }}</div>
             <div class="grey--text">{{ new Date(global.totals.updated) }}</div>
         </div>
     </div>

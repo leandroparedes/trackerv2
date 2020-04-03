@@ -70,7 +70,7 @@
         </v-row>
 
         <div class="text-center mt-4 mb-8">
-            <div class="primary--text">Last updated</div>
+            <div class="primary--text mb-1">Last updated {{ country.info.updated | moment('from', 'now') }}</div>
             <div class="grey--text">{{ new Date(country.info.updated) }}</div>
         </div>
     </div>
