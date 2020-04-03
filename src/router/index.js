@@ -16,27 +16,32 @@ const routes = [
     {
         path: '/global',
         name: 'Global',
-        component: Global
+        component: Global,
+        meta: { title: 'Global Status' }
     },
     {
         path: '/country/:countryCode',
         name: 'ViewCountry',
-        component: ViewCountry
+        component: ViewCountry,
+        meta: { title: 'Country Status' }
     },
     {
         path: '/search',
         name: 'Search',
-        component: Search
+        component: Search,
+        meta: { title: 'Search Country' }
     },
     {
         path: '/compare',
         name: 'Compare',
-        component: Compare
+        component: Compare,
+        meta: { title: 'Compare Countries' }
     },
     {
         path: '/settings',
         name: 'Settings',
-        component: Settings
+        component: Settings,
+        meta: { title: 'Settings' }
     }
 ];
 
@@ -44,6 +49,14 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
+});
+
+const DEFAULT_TITLE = 'Covid-T';
+
+router.afterEach((to, from ) => {
+    Vue.nextTick(() => {
+        document.title = to.meta.title || DEFAULT_TITLE;
+    });
 });
 
 export default router;
