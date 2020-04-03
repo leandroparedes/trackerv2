@@ -4,6 +4,7 @@ import Global from '@/views/Global.vue';
 import Search from '@/views/Search.vue';
 import ViewCountry from '@/views/ViewCountry.vue';
 import Compare from '@/views/Compare.vue';
+import Settings from '@/views/Settings.vue';
 
 Vue.use(VueRouter);
 
@@ -31,6 +32,11 @@ const routes = [
         path: '/compare',
         name: 'Compare',
         component: Compare
+    },
+    {
+        path: '/settings',
+        name: 'Settings',
+        component: Settings
     }
 ];
 
