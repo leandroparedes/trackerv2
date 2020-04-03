@@ -6,6 +6,9 @@
                 <slot name="icon"></slot>
             </v-icon>
         </v-card-title>
+        <v-card-subtitle>
+            <slot name="subtitle"></slot>
+        </v-card-subtitle>
         <v-card-text class="headline">
             <slot name="count-total">0</slot>
             <span class="body-1 font-weight-bold success--text ml-1">
