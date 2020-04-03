@@ -7,6 +7,7 @@
 <script>
 import { Line, mixins } from 'vue-chartjs';
 const { reactiveProp } = mixins;
+import Chart from 'chart.js';
 
 export default {
     name: 'BaseChart',
@@ -25,6 +26,12 @@ export default {
                 elements: {
                     point: {
                         radius: 1
+                    }
+                },
+                legend: {
+                    labels: {
+                        boxWidth: 8,
+                        usePointStyle: true,
                     }
                 },
                 hover: {
@@ -74,6 +81,10 @@ export default {
     },
 
     mounted () {
+        Chart.Legend.prototype.afterFit = function() {
+            this.height = this.height + 10;
+        };
+        
         this.renderChart(this.chartData, this.options);
     },
 
