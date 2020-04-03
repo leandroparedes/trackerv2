@@ -40,13 +40,13 @@
         </v-row>
 
         <v-row>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" md="6">
                 <v-card class="pa-4">
                     <div class="title pb-2">Exponential</div>
                     <historical-chart :chart-data="historicalData" type="linear"></historical-chart>
                 </v-card>
             </v-col>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" md="6">
                 <v-card class="pa-4">
                     <div class="title pb-2">Logarithmic</div>
                     <historical-chart :chart-data="historicalData" type="logarithmic"></historical-chart>
@@ -54,7 +54,7 @@
             </v-col>
         </v-row>
 
-        <div class="text-center mt-4">
+        <div class="text-center mt-4 mb-8">
             <div class="primary--text">Last updated</div>
             <div class="grey--text">{{ new Date(global.totals.updated) }}</div>
         </div>
