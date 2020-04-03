@@ -16,6 +16,10 @@
                 ></v-switch>
             </div>
         </div>
+
+        <div class="text-center mt-8">
+            <a @click="$router.go(-1)">Go back</a>
+        </div>
     </div>
 </template>
 
