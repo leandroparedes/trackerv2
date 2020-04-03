@@ -58,7 +58,7 @@
             Most affected countries
         </div>
 
-        <v-row v-if="mostAffectedCountries.length" class="mb-8">
+        <v-row v-if="mostAffectedCountries" class="mb-8">
             <v-col
                 cols="12" sm="6" md="3"
                 v-for="(country, index) in mostAffectedCountries"
