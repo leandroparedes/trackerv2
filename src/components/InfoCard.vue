@@ -6,15 +6,18 @@
                 <slot name="icon"></slot>
             </v-icon>
         </v-card-title>
-        <v-card-subtitle>
+        <v-card-subtitle class="pb-2">
             <slot name="subtitle"></slot>
         </v-card-subtitle>
-        <v-card-text class="headline">
+        <v-card-text class="headline pb-1">
             <slot name="count-total">0</slot>
             <span class="body-1 font-weight-bold success--text ml-1">
                 <slot name="count-today"></slot>
             </span>
         </v-card-text>
+        <v-card-subtitle class="pt-0">
+            <slot name="additional-info"></slot>
+        </v-card-subtitle>
     </v-card>
 </template>
 
