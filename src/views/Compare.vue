@@ -82,7 +82,29 @@ export default {
                 cases: { labels: [], datasets: [] },
                 recovered: { labels: [], datasets: [] },
                 deaths: { labels: [], datasets: [] }
-            }
+            },
+
+            colorPool: [
+                { color: '#008000', country: null },
+                { color: '#8b0000', country: null },
+                { color: '#87cefa', country: null },
+                { color: '#2f4f4f', country: null },
+                { color: '#bdb76b', country: null },
+                { color: '#000080', country: null },
+                { color: '#ff0000', country: null },
+                { color: '#ff8c00', country: null },
+                { color: '#7fff00', country: null },
+                { color: '#00fa9a', country: null },
+                { color: '#0000ff', country: null },
+                { color: '#f08080', country: null },
+                { color: '#ff00ff', country: null },
+                { color: '#1e90ff', country: null },
+                { color: '#dda0dd', country: null },
+                { color: '#ff1493', country: null },
+                { color: '#fffff0', country: null },
+                { color: '#ffd700', country: null },
+                { color: '#00ffff', country: null }
+            ]
         }
     },
 
@@ -95,6 +117,23 @@ export default {
     methods: {
         remove: function (country) {
             this.values = this.values.filter(v => v != country);
+        },
+        getColor: function (country) {
+            const color = this.colorPool.find(c => c.country == country);
+
+            if (color) {
+                return color.color;
+            } else {
+                const availableColors = this.colorPool.filter(c => c.country == null);
+                
+                if (availableColors.length > 0) {
+                    const color = availableColors[0].color;
+                    this.colorPool.find(c => c.color == color).country = country;
+                    return color;
+                } else {
+                    return this.getRandomColor();
+                }
+            }
         },
         getRandomColor: function () {
             var color = Math.floor(Math.random() * 16777216).toString(16);
@@ -120,7 +159,7 @@ export default {
                 const lastAddedCountry = newValues.length > 0 ? newValues[newValues.length -1] : newValues[0];
                 const historicalUrl = `https://corona.lmao.ninja/v2/historical/${lastAddedCountry}`;
 
-                const color = this.getRandomColor();
+                const color = this.getColor(lastAddedCountry);
 
                 this.axios.get(historicalUrl).then(res => {
                     Object.keys(this.charts).map(chart => {
