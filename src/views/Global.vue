@@ -74,6 +74,14 @@
                     >
                         +{{ country.todayCases | formatNumber }}
                     </template>
+                    <template
+                        v-slot:additional-info
+                        v-if="global.totals.cases > 0"
+                    >
+                        <span class="error--text">
+                            {{ Math.round((country.cases * 100) / global.totals.cases) }}% of world total cases
+                        </span>
+                    </template>
                 </info-card>
             </v-col>
         </v-row>
