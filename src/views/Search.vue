@@ -36,10 +36,10 @@
             </v-row>
         </div>
         <div v-else-if="searchedCountries.length > 0">
-            <div class="d-flex justify-space-between">
-                <div class="headline font-weight-black mt-2 mb-2 text-uppercase">
-                    Recently searched countries
-                </div>
+            <div class="headline font-weight-black mt-2 mb-2 text-uppercase">
+                Recently searched countries
+            </div>
+            <div class="d-flex flex-row-reverse">
                 <v-btn
                     text
                     color="primary"
