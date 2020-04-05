@@ -1,5 +1,5 @@
 <template>
-    <v-card :style="{'border-top': `4px solid ${this.color}`}">
+    <v-card :style="{'border-top': `4px solid ${this.color}`}" style="min-height: 100%">
         <v-card-title class="d-flex justify-space-between">
             <slot name="title">Information</slot>
             <v-icon :color="color">

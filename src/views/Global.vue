@@ -11,6 +11,17 @@
                     <template v-slot:title>Cases</template>
                     <template v-slot:icon>fas fa-globe-americas</template>
                     <template v-slot:count-total>{{ global.totals.cases | formatNumber }}</template>
+                    <template
+                        v-if="global.totals.todayCases > 0"
+                        v-slot:count-today
+                    >
+                        +{{ global.totals.todayCases | formatNumber }}
+                    </template>
+                    <template v-slot:additional-info>
+                        <span class="error--text">
+                            {{ global.totals.casesPerOneMillion | formatNumber }} per million
+                        </span>
+                    </template>
                 </info-card>
             </v-col>
 
@@ -19,6 +30,9 @@
                     <template v-slot:title>Actives</template>
                     <template v-slot:icon>fas fa-head-side-mask</template>
                     <template v-slot:count-total>{{ global.totals.active | formatNumber }}</template>
+                    <template v-slot:additional-info>
+                        <span class="error--text">  {{ global.totals.critical | formatNumber }} on critical condition</span>
+                    </template>
                 </info-card>
             </v-col>
 
@@ -35,6 +49,17 @@
                     <template v-slot:title>Deaths</template>
                     <template v-slot:icon>fas fa-skull-crossbones</template>
                     <template v-slot:count-total>{{ global.totals.deaths | formatNumber }}</template>
+                    <template
+                        v-if="global.totals.todayDeaths > 0"
+                        v-slot:count-today
+                    >
+                        +{{ global.totals.todayDeaths | formatNumber }}
+                    </template>
+                    <template v-slot:additional-info>
+                        <span class="error--text">
+                            {{ global.totals.deathsPerOneMillion | formatNumber }} per million
+                        </span>
+                    </template>
                 </info-card>
             </v-col>
         </v-row>
