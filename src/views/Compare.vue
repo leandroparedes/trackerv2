@@ -29,7 +29,7 @@
         </v-autocomplete>
 
         <div v-if="values.length">
-            <v-row class="mb-8">
+            <v-row class="mb-3">
                 <v-col
                     cols="12" lg="6"
                     v-for="(type,index) in chartTypes"
