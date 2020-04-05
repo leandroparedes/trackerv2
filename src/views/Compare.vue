@@ -96,7 +96,7 @@
                                 {{ country.active | formatNumber }}
                             </td>
                             <td class="text-center no-wrap">
-                                {{ country.critical }}
+                                {{ country.critical | formatNumber }}
                             </td>
                             <td class="text-center no-wrap">{{ country.recovered | formatNumber }}</td>
                             <td class="text-center no-wrap">
