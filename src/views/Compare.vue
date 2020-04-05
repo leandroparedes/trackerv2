@@ -14,6 +14,8 @@
             label="Choose countries to compare"
             multiple
             class="mt-8"
+            :search-input.sync="searchInput"
+            @change="searchInput=''"
         >
             <template v-slot:selection="data">
                 <v-chip
