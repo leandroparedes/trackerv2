@@ -86,6 +86,11 @@
                             {{ item.critical | formatNumber }}
                         </span>
                     </template>
+                    <template v-slot:item.recovered="{ item }">
+                        <span class="text-center">
+                            {{ item.recovered | formatNumber }}
+                        </span>
+                    </template>
                     <template v-slot:item.deaths="{ item }">
                         <span class="text-center">
                             {{ item.deaths | formatNumber }}
