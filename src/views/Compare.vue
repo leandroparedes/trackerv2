@@ -157,7 +157,7 @@ export default {
                 this.loadingCharts = true;
 
                 const lastAddedCountry = newValues.length > 0 ? newValues[newValues.length -1] : newValues[0];
-                const historicalUrl = `https://corona.lmao.ninja/v2/historical/${lastAddedCountry}`;
+                const historicalUrl = `https://corona.lmao.ninja/v2/historical/${lastAddedCountry}?lastdays=all`;
 
                 const color = this.getColor(lastAddedCountry);
 
