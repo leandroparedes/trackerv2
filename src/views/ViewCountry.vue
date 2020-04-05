@@ -7,6 +7,9 @@
                 </v-avatar>
                 {{ country.info.country }}
             </div>
+            <div class="title grey--text font-weight-bold text-uppercase mt-2">
+                Population: {{ country.info.population | formatNumber }}
+            </div>
         </div>
 
         <v-row class="mt-3">
@@ -124,10 +127,12 @@ export default {
         const countryCode = this.$route.params.countryCode;
         const infoUrl = this.axios.get(`https://corona.lmao.ninja/countries/${countryCode}`);
         const historicalUrl =  this.axios.get(`https://corona.lmao.ninja/v2/historical/${countryCode}?lastdays=all`);
+        const populationUrl = this.axios.get(`https://restcountries.eu/rest/v2/alpha/${countryCode}?fields=population`);
 
-        this.axios.all([infoUrl, historicalUrl]).then(this.axios.spread((info, historical) => {
+        this.axios.all([infoUrl, historicalUrl, populationUrl]).then(this.axios.spread((info, historical, population) => {
             this.country.info = info.data;
             this.country.historical = historical.data;
+            this.country.info.population = population.data.population;
         })).finally(() => this.loaded = true);
     },
 
