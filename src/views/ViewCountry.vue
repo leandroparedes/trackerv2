@@ -21,6 +21,15 @@
                     >
                         +{{ country.info.todayCases | formatNumber }}
                     </template>
+                    <template v-slot:additional-info>
+                        <span class="error--text">
+                            {{ country.info.casesPerOneMillion | formatNumber }} per million
+                        </span>
+                        <span class="font-weight-bold mx-1">&middot;</span>
+                        <span class="info--text">
+                            {{ country.info.tests | formatNumber }} tests
+                        </span>
+                    </template>
                 </info-card>
             </v-col>
 
@@ -29,6 +38,9 @@
                     <template v-slot:title>Actives</template>
                     <template v-slot:icon>fas fa-head-side-mask</template>
                     <template v-slot:count-total>{{ country.info.active | formatNumber }}</template>
+                    <template v-slot:additional-info>
+                        <span class="error--text">  {{ country.info.critical | formatNumber }} on critical condition</span>
+                    </template>
                 </info-card>
             </v-col>
 
@@ -37,6 +49,11 @@
                     <template v-slot:title>Recovered</template>
                     <template v-slot:icon>fas fa-heart</template>
                     <template v-slot:count-total>{{ country.info.recovered |formatNumber }}</template>
+                    <template v-slot:additional-info>
+                        <span class="success--text">
+                            {{ Math.round((country.info.recovered * 100) / country.info.cases) }}% recovered
+                        </span>
+                    </template>
                 </info-card>
             </v-col>
 
@@ -50,6 +67,11 @@
                         v-slot:count-today
                     >
                         +{{ country.info.todayDeaths | formatNumber }}
+                    </template>
+                    <template v-slot:additional-info>
+                        <span class="error--text">
+                            {{ country.info.deathsPerOneMillion | formatNumber }} per million
+                        </span>
                     </template>
                 </info-card>
             </v-col>
