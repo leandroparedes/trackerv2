@@ -100,7 +100,7 @@ export default {
 
         const countryCode = this.$route.params.countryCode;
         const infoUrl = this.axios.get(`https://corona.lmao.ninja/countries/${countryCode}`);
-        const historicalUrl =  this.axios.get(`https://corona.lmao.ninja/v2/historical/${countryCode}`);
+        const historicalUrl =  this.axios.get(`https://corona.lmao.ninja/v2/historical/${countryCode}?lastdays=all`);
 
         this.axios.all([infoUrl, historicalUrl]).then(this.axios.spread((info, historical) => {
             this.country.info = info.data;
