@@ -65,6 +65,7 @@
                             <th>Country</th>
                             <th class="text-center">Cases</th>
                             <th class="text-center">Actives</th>
+                            <th class="text-center">Critical</th>
                             <th class="text-center">Recovered</th>
                             <th class="text-center">Deaths</th>
                             <th class="text-center">Tested</th>
@@ -75,7 +76,7 @@
                             v-for="(country, index) in countriesInfo"
                             :key="index"
                         >
-                            <td>
+                            <td class="no-wrap">
                                 <div>
                                     <v-avatar size="18" class="mr-2">
                                         <img :src="country.countryInfo.flag">
@@ -85,22 +86,27 @@
                                     </router-link>
                                 </div>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center no-wrap">
                                 {{ country.cases | formatNumber }}
-                                <span class="grey--text ml-1">({{ country.casesPerOneMillion | formatNumber }} per million)</span>
+                                <span class="success--text ml-1 caption">
+                                    +{{ country.todayCases | formatNumber }}
+                                </span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center no-wrap">
                                 {{ country.active | formatNumber }}
-                                <span class="grey--text ml-1">({{ country.critical | formatNumber }} critical)</span>
                             </td>
-                            <td class="text-center">{{ country.recovered | formatNumber }}</td>
-                            <td class="text-center">
+                            <td class="text-center no-wrap">
+                                {{ country.critical }}
+                            </td>
+                            <td class="text-center no-wrap">{{ country.recovered | formatNumber }}</td>
+                            <td class="text-center no-wrap">
                                 {{ country.deaths | formatNumber }}
-                                <span class="grey--text ml-1">({{ country.deathsPerOneMillion | formatNumber }} per million)</span>
+                                <span class="success--text ml-1 caption">
+                                    +{{ country.todayDeaths | formatNumber }}
+                                </span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center no-wrap">
                                 {{ country.tests | formatNumber }}
-                                <span class="grey--text ml-1">({{ country.testsPerOneMillion | formatNumber }} per million)</span>
                             </td>
                         </tr>
                     </tbody>
@@ -248,3 +254,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .no-wrap {
+        white-space: nowrap
+    }
+</style>
