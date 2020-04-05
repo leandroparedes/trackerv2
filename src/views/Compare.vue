@@ -125,6 +125,7 @@ export default {
 
     data: function () {
         return {
+            searchInput: '',
             values: [],
             items: [],
 
