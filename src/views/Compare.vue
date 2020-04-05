@@ -28,34 +28,85 @@
             </template>
         </v-autocomplete>
 
-        <v-row v-if="values.length" class="mb-8">
-            <v-col
-                cols="12" lg="6"
-                v-for="(type,index) in chartTypes"
-                :key="index"
-            >
-                <v-card>
-                    <div class="title pl-4 pt-4 text-capitalize">{{ type }}</div>
-                    <v-tabs centered>
-                        <v-tab v-for="(chart, index) in Object.keys(charts)" :key="index">
-                            {{ chart }}
-                        </v-tab>
+        <div v-if="values.length">
+            <v-row class="mb-8">
+                <v-col
+                    cols="12" lg="6"
+                    v-for="(type,index) in chartTypes"
+                    :key="index"
+                >
+                    <v-card>
+                        <div class="title pl-4 pt-4 text-capitalize">{{ type }}</div>
+                        <v-tabs centered>
+                            <v-tab v-for="(chart, index) in Object.keys(charts)" :key="index">
+                                {{ chart }}
+                            </v-tab>
 
-                        <v-tab-item
-                            class="pa-4"
-                            v-for="(chart, index) in Object.keys(charts)"
+                            <v-tab-item
+                                class="pa-4"
+                                v-for="(chart, index) in Object.keys(charts)"
+                                :key="index"
+                            >
+                                <historical-chart
+                                    v-if="! loadingCharts"
+                                    :chart-data="charts[chart]"
+                                    :type="type"
+                                ></historical-chart>
+                            </v-tab-item>
+                        </v-tabs>
+                    </v-card>
+                </v-col>
+            </v-row>
+
+            <v-simple-table class="mb-8">
+                <template v-slot:default>
+                    <thead>
+                        <tr>
+                            <th>Country</th>
+                            <th class="text-center">Cases</th>
+                            <th class="text-center">Actives</th>
+                            <th class="text-center">Recovered</th>
+                            <th class="text-center">Deaths</th>
+                            <th class="text-center">Tested</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="(country, index) in countriesInfo"
                             :key="index"
                         >
-                            <historical-chart
-                                v-if="! loadingCharts"
-                                :chart-data="charts[chart]"
-                                :type="type"
-                            ></historical-chart>
-                        </v-tab-item>
-                    </v-tabs>
-                </v-card>
-            </v-col>
-        </v-row>
+                            <td>
+                                <div>
+                                    <v-avatar size="18" class="mr-2">
+                                        <img :src="country.countryInfo.flag">
+                                    </v-avatar>
+                                    <router-link :to="`/country/${country.countryInfo.iso2}`">
+                                        {{ country.country }}
+                                    </router-link>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                {{ country.cases | formatNumber }}
+                                <span class="grey--text ml-1">({{ country.casesPerOneMillion | formatNumber }} per million)</span>
+                            </td>
+                            <td class="text-center">
+                                {{ country.active | formatNumber }}
+                                <span class="grey--text ml-1">({{ country.critical | formatNumber }} critical)</span>
+                            </td>
+                            <td class="text-center">{{ country.recovered | formatNumber }}</td>
+                            <td class="text-center">
+                                {{ country.deaths | formatNumber }}
+                                <span class="grey--text ml-1">({{ country.deathsPerOneMillion | formatNumber }} per million)</span>
+                            </td>
+                            <td class="text-center">
+                                {{ country.tests | formatNumber }}
+                                <span class="grey--text ml-1">({{ country.testsPerOneMillion | formatNumber }} per million)</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </template>
+            </v-simple-table>
+        </div>
         <div v-else class="text-center grey--text mt-6">
             <v-icon size="100" color="grey">fas fa-globe-americas</v-icon>
             <div class="headline mt-6">Select countries to compare</div>
@@ -85,6 +136,8 @@ export default {
                 recovered: { labels: [], datasets: [] },
                 deaths: { labels: [], datasets: [] }
             },
+
+            countriesInfo: [],
 
             colorPool: [
                 { color: '#008000', country: null },
@@ -160,6 +213,10 @@ export default {
 
                 const lastAddedCountry = newValues.length > 0 ? newValues[newValues.length -1] : newValues[0];
                 const historicalUrl = `https://corona.lmao.ninja/v2/historical/${lastAddedCountry}?lastdays=all`;
+
+                const country = this.$store.state.countries.data.find(c => c.country == lastAddedCountry);
+
+                this.countriesInfo.push(country);
 
                 const color = this.getColor(lastAddedCountry);
 
