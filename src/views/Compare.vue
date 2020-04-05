@@ -202,12 +202,16 @@ export default {
                 Object.keys(this.charts).map(chart => {
                     this.charts[chart] = { labels: [], datasets: [] };
                 });
+                
+                this.countriesInfo = [];
             } else if (newValues.length < oldValues.length) {
                 const removed = oldValues.filter(c => !newValues.includes(c))[0];
 
                 Object.keys(this.charts).map(chart => {
                     this.charts[chart].datasets = this.charts[chart].datasets.filter(d => d.label != removed);
                 });
+
+                this.countriesInfo = this.countriesInfo.filter(c => c.country != removed);
             } else {
                 this.loadingCharts = true;
 
