@@ -1,11 +1,12 @@
 <template>
     <div v-if="loaded">
         <div class="text-center">
-            <div class="display-2 font-weight-black">
-                <v-avatar size="42" class="mb-2 mr-2">
+            <div class="display-2 font-weight-black text-uppercase">
+                <v-avatar size="42" class="mb-2 mr-1">
                     <img :src="country.info.countryInfo.flag">
                 </v-avatar>
-            {{ country.info.country }}</div>
+                {{ country.info.country }}
+            </div>
         </div>
 
         <v-row class="mt-3">
