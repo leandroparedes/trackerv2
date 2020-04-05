@@ -31,7 +31,7 @@
                     <template v-slot:icon>fas fa-head-side-mask</template>
                     <template v-slot:count-total>{{ global.totals.active | formatNumber }}</template>
                     <template v-slot:additional-info>
-                        <span class="error--text">  {{ global.totals.critical | formatNumber }} on critical condition</span>
+                        <span class="error--text">  {{ global.totals.critical | formatNumber }} in critical condition</span>
                     </template>
                 </info-card>
             </v-col>

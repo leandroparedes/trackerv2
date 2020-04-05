@@ -39,7 +39,7 @@
                     <template v-slot:icon>fas fa-head-side-mask</template>
                     <template v-slot:count-total>{{ country.info.active | formatNumber }}</template>
                     <template v-slot:additional-info>
-                        <span class="error--text">  {{ country.info.critical | formatNumber }} on critical condition</span>
+                        <span class="error--text">  {{ country.info.critical | formatNumber }} in critical condition</span>
                     </template>
                 </info-card>
             </v-col>
