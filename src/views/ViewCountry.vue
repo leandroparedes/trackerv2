@@ -27,7 +27,7 @@
                         </span>
                         <span class="font-weight-bold mx-1">&middot;</span>
                         <span class="info--text">
-                            {{ country.info.tests | formatNumber }} tests
+                            {{ country.info.tests | formatNumber }} tested
                         </span>
                     </template>
                 </info-card>
