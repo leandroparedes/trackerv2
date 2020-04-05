@@ -205,6 +205,10 @@ export default {
                 });
                 
                 this.countriesInfo = [];
+
+                this.colorPool.map(color => {
+                    color.country = null;
+                });
             } else if (newValues.length < oldValues.length) {
                 const removed = oldValues.filter(c => !newValues.includes(c))[0];
 
