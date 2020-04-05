@@ -41,6 +41,11 @@
                     <template v-slot:title>Recovered</template>
                     <template v-slot:icon>fas fa-heart</template>
                     <template v-slot:count-total>{{ global.totals.recovered |formatNumber }}</template>
+                    <template v-slot:additional-info>
+                        <span class="success--text">
+                            {{ Math.round((global.totals.recovered * 100) / global.totals.cases) }}% recovered
+                        </span>
+                    </template>
                 </info-card>
             </v-col>
 
