@@ -58,60 +58,56 @@
                 </v-col>
             </v-row>
 
-            <v-simple-table class="mb-8">
-                <template v-slot:default>
-                    <thead>
-                        <tr>
-                            <th>Country</th>
-                            <th class="text-center">Cases</th>
-                            <th class="text-center">Actives</th>
-                            <th class="text-center">Critical</th>
-                            <th class="text-center">Recovered</th>
-                            <th class="text-center">Deaths</th>
-                            <th class="text-center">Tested</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            v-for="(country, index) in countriesInfo"
-                            :key="index"
-                        >
-                            <td class="no-wrap">
-                                <div>
-                                    <v-avatar size="18" class="mr-2">
-                                        <img :src="country.countryInfo.flag">
-                                    </v-avatar>
-                                    <router-link :to="`/country/${country.countryInfo.iso2}`">
-                                        {{ country.country }}
-                                    </router-link>
-                                </div>
-                            </td>
-                            <td class="text-center no-wrap">
-                                {{ country.cases | formatNumber }}
-                                <span class="success--text ml-1 caption">
-                                    +{{ country.todayCases | formatNumber }}
-                                </span>
-                            </td>
-                            <td class="text-center no-wrap">
-                                {{ country.active | formatNumber }}
-                            </td>
-                            <td class="text-center no-wrap">
-                                {{ country.critical | formatNumber }}
-                            </td>
-                            <td class="text-center no-wrap">{{ country.recovered | formatNumber }}</td>
-                            <td class="text-center no-wrap">
-                                {{ country.deaths | formatNumber }}
-                                <span class="success--text ml-1 caption">
-                                    +{{ country.todayDeaths | formatNumber }}
-                                </span>
-                            </td>
-                            <td class="text-center no-wrap">
-                                {{ country.tests | formatNumber }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </template>
-            </v-simple-table>
+            <v-card>
+                <v-card-title class="pl-4">More information</v-card-title>
+                <v-data-table
+                    :headers="headers"
+                    :items="countriesInfo"
+                    class="mb-8"
+                >
+                    <template v-slot:item.country="{ item }">
+                        <v-avatar size="18" class="mr-1">
+                            <img :src="item.country.flag">
+                        </v-avatar>
+                        {{ item.country.name }}
+                    </template>
+                    <template v-slot:item.cases="{ item }">
+                        <span class="text-center">
+                            {{ item.cases | formatNumber }}
+                        </span>
+                    </template>
+                    <template v-slot:item.casesPerMillion="{ item }">
+                        <div class="text-center">
+                            {{ item.casesPerMillion | formatNumber }}
+                        </div>
+                    </template>
+                    <template v-slot:item.critical="{ item }">
+                        <span class="text-center">
+                            {{ item.critical | formatNumber }}
+                        </span>
+                    </template>
+                    <template v-slot:item.deaths="{ item }">
+                        <span class="text-center">
+                            {{ item.deaths | formatNumber }}
+                        </span>
+                    </template>
+                    <template v-slot:item.deathsPerMillion="{ item }">
+                        <span class="text-center">
+                            {{ item.deathsPerMillion | formatNumber }}
+                        </span>
+                    </template>
+                    <template v-slot:item.tests="{ item }">
+                        <span class="text-center">
+                            {{ item.tests | formatNumber }}
+                        </span>
+                    </template>
+                    <template v-slot:item.testsPerMillion="{ item }">
+                        <span class="text-center">
+                            {{ item.testsPerMillion | formatNumber }}
+                        </span>
+                    </template>
+                </v-data-table>
+            </v-card>
         </div>
         <div v-else class="text-center grey--text mt-6">
             <v-icon size="100" color="grey">fas fa-globe-americas</v-icon>
@@ -144,6 +140,17 @@ export default {
                 deaths: { labels: [], datasets: [] }
             },
 
+            headers: [
+                { text: 'Country', value: 'country', sortable: false },
+                { text: 'Cases', value: 'cases', align: 'center' },
+                { text: 'Cases per million', value: 'casesPerMillion', align: 'center' },
+                { text: 'Critical', value: 'critical', align: 'center' },
+                { text: 'Recovered', value: 'recovered', align: 'center' },
+                { text: 'Deaths', value: 'deaths', align: 'center' },
+                { text: 'Deaths per million', value: 'deathsPerMillion', align: 'center' },
+                { text: 'Tests', value: 'tests', align: 'center' },
+                { text: 'Tests per million', value: 'testsPerMillion', align: 'center' },
+            ],
             countriesInfo: [],
 
             colorPool: [
@@ -222,7 +229,7 @@ export default {
                     this.charts[chart].datasets = this.charts[chart].datasets.filter(d => d.label != removed);
                 });
 
-                this.countriesInfo = this.countriesInfo.filter(c => c.country != removed);
+                this.countriesInfo = this.countriesInfo.filter(c => c.country.name != removed);
             } else {
                 this.loadingCharts = true;
 
@@ -231,7 +238,20 @@ export default {
 
                 const country = this.$store.state.countries.data.find(c => c.country == lastAddedCountry);
 
-                this.countriesInfo.push(country);
+                this.countriesInfo.push({
+                    country: {
+                        name: country.country,
+                        flag: country.countryInfo.flag
+                    },
+                    cases: country.cases,
+                    casesPerMillion: country.casesPerOneMillion,
+                    critical: country.critical,
+                    recovered: country.recovered,
+                    deaths: country.deaths,
+                    deathsPerMillion: country.deathsPerOneMillion,
+                    tests: country.tests,
+                    testsPerMillion: country.testsPerOneMillion,
+                });
 
                 const color = this.getColor(lastAddedCountry);
 
