@@ -4,31 +4,13 @@
             <div class="display-2 font-weight-black">COMPARE</div>
         </div>
 
-        <v-autocomplete
-            v-model="values"
-            :items="items"
-            outlined
-            chips
-            small-chips
-            clearable
-            label="Choose countries to compare"
-            multiple
-            class="mt-8"
-            :search-input.sync="searchInput"
-            @change="searchInput=''"
-        >
-            <template v-slot:selection="data">
-                <v-chip
-                    v-bind="data.attrs"
-                    :input-value="data.selected"
-                    close
-                    @click="data.select"
-                    @click:close="remove(data.item)"
-                >{{ data.item }}</v-chip>
-            </template>
-        </v-autocomplete>
+        <countries-selection-input
+            @countries-cleared="handleCountriesCleared"
+            @country-added="handleCountryAdded"
+            @country-removed="handleCountryRemoved"
+        ></countries-selection-input>
 
-        <div v-if="values.length">
+        <div v-if="dataAdded">
             <v-row class="mb-3">
                 <v-col
                     cols="12" lg="6"
@@ -123,18 +105,22 @@
 
 <script>
 import { mapState } from 'vuex';
+import CountriesSelectionInput from '@/components/CountriesSelectionInput.vue';
 import HistoricalChart from '@/components/HistoricalChart.vue';
+import api from '@/api';
 
 export default {
     name: 'Compare',
 
-    components: { HistoricalChart },
+    components: {
+        HistoricalChart,
+        CountriesSelectionInput
+    },
 
     data: function () {
         return {
-            searchInput: '',
+            dataAdded: false,
             values: [],
-            items: [],
 
             chartTypes: ['linear', 'logarithmic'],
             
@@ -184,22 +170,9 @@ export default {
 
     mounted () {
         this.$store.dispatch('fetch_countries_data');
-        const countries = this.$store.state.countries.data;
-        countries.map(country => this.items.push(country.country));
-
-        const queryString = this.$route.query.c;
-        let countriesQueryString = queryString ? queryString.split(';') : [];
-        countriesQueryString.map(country => {
-            setTimeout(() => {
-                this.values.push(country);
-            }, 0)
-        });
     },
 
     methods: {
-        remove: function (country) {
-            this.values = this.values.filter(v => v != country);
-        },
         getColor: function (country) {
             const color = this.colorPool.find(c => c.country == country);
 
@@ -217,96 +190,112 @@ export default {
                 }
             }
         },
+
         getRandomColor: function () {
             var color = Math.floor(Math.random() * 16777216).toString(16);
             return '#000000'.slice(0, -color.length) + color;
+        },
+
+        loadChartData: async function (countryCode) {
+            this.loadingCharts = true;
+
+            const data = await api.getCountryHistorical(countryCode);
+
+            const color = this.getColor(countryCode);
+            Object.keys(this.charts).map(chart => {
+                this.charts[chart].labels = Object.keys(data.timeline[chart]);
+                this.charts[chart].datasets.push({
+                    label: data.country,
+                    data: Object.values(data.timeline[chart]),
+                    fill: false,
+                    borderColor: color,
+                    pointBackgroundColor: color
+                });
+            });
+
+            this.loadingCharts = false;
+        },
+
+        loadInfoData: function (countryCode) {
+            const country = this.countries.data.find(c => c.countryInfo.iso2 == countryCode);
+            this.countriesInfo.push({
+                country: { name: country.country, flag: country.countryInfo.flag },
+                cases: country.cases,
+                casesPerMillion: country.casesPerOneMillion,
+                critical: country.critical,
+                recovered: country.recovered,
+                deaths: country.deaths,
+                deathsPerMillion: country.deathsPerOneMillion,
+                tests: country.tests,
+                testsPerMillion: country.testsPerOneMillion,
+            });
+        },
+
+        loadCountriesFromQueryString: function () {
+            const c = this.$route.query.c;
+            const countries = c ? c.split(';') : [];
+            countries.map(country => this.values.push(country));
+        },
+
+        addCountryToQueryString: function (countryCode) {
+            const c = this.$route.query.c;
+            const countries = c ? c.split(';') : [];
+
+            if (! countries.includes(countryCode)) {
+                countries.push(countryCode);
+                this.$router.push({
+                    path: '/compare',
+                    query: { c: countries.join(';') }
+                });
+            }
+        },
+
+        removeCountryFromQueryString: function (countryCode) {
+            const c = this.$route.query.c;
+            let countries = c ? c.split(';') : [];
+
+            countries = countries.filter(c => c != countryCode);
+
+            this.$router.push({
+                path: '/compare',
+                query: { c: countries.join(';') }
+            });
+        },
+
+        handleCountriesCleared: function () {
+            this.dataAdded = false;
+
+            Object.keys(this.charts).map(chart => {
+                this.charts[chart] = { labels: [], datasets: [] };
+            });
+
+            this.countriesInfo = [];
+            this.colorPool.map(color => color.country = null);
+            this.$router.push({ path: '/compare' });
+        },
+
+        handleCountryAdded: function (countryCode) {
+            this.dataAdded = true;
+            this.loadChartData(countryCode);
+            this.loadInfoData(countryCode);
+            this.addCountryToQueryString(countryCode);
+        },
+
+        handleCountryRemoved: function (countryCode) {
+            const country = this.countries.data.find(c => c.countryInfo.iso2 == countryCode);
+
+            Object.keys(this.charts).map(chart => {
+                this.charts[chart].datasets = this.charts[chart].datasets.filter(d => d.label != country.country);
+            });
+
+            this.countriesInfo = this.countriesInfo.filter(c => c.country.name != country.country);
+
+            this.removeCountryFromQueryString(countryCode);
         }
     },
 
-    watch: {
-        values: function (newValues, oldValues) {
-            if (newValues.length === 0) {
-                Object.keys(this.charts).map(chart => {
-                    this.charts[chart] = { labels: [], datasets: [] };
-                });
-                
-                this.countriesInfo = [];
-
-                this.colorPool.map(color => {
-                    color.country = null;
-                });
-
-                this.$router.push({
-                    path: '/compare'
-                });
-            } else if (newValues.length < oldValues.length) {
-                const removed = oldValues.filter(c => !newValues.includes(c))[0];
-
-                Object.keys(this.charts).map(chart => {
-                    this.charts[chart].datasets = this.charts[chart].datasets.filter(d => d.label != removed);
-                });
-
-                this.countriesInfo = this.countriesInfo.filter(c => c.country.name != removed);
-
-                const queryString = this.$route.query.c;
-                let countriesQueryString = queryString ? queryString.split(';') : [];
-                countriesQueryString = countriesQueryString.filter(c => c != removed);
-                this.$router.push({
-                    path: '/compare',
-                    query: { c: countriesQueryString.join(';') }
-                });
-            } else {
-                this.loadingCharts = true;
-
-                const lastAddedCountry = newValues.length > 0 ? newValues[newValues.length -1] : newValues[0];
-                const historicalUrl = `https://corona.lmao.ninja/v2/historical/${lastAddedCountry}?lastdays=all`;
-
-                const country = this.$store.state.countries.data.find(c => c.country == lastAddedCountry);
-
-                this.countriesInfo.push({
-                    country: {
-                        name: country.country,
-                        flag: country.countryInfo.flag
-                    },
-                    cases: country.cases,
-                    casesPerMillion: country.casesPerOneMillion,
-                    critical: country.critical,
-                    recovered: country.recovered,
-                    deaths: country.deaths,
-                    deathsPerMillion: country.deathsPerOneMillion,
-                    tests: country.tests,
-                    testsPerMillion: country.testsPerOneMillion,
-                });
-
-                const queryString = this.$route.query.c;
-                const countriesQueryString = queryString ? queryString.split(';') : [];
-                if (! countriesQueryString.includes(lastAddedCountry)) {
-                    countriesQueryString.push(lastAddedCountry);
-
-                    this.$router.push({
-                        path: '/compare',
-                        query: { c: countriesQueryString.join(';') }
-                    });
-                }
-
-                const color = this.getColor(lastAddedCountry);
-
-                this.axios.get(historicalUrl).then(res => {
-                    Object.keys(this.charts).map(chart => {
-                        this.charts[chart].labels = Object.keys(res.data.timeline[chart]);
-                        this.charts[chart].datasets.push({
-                            label: res.data.country,
-                            data: Object.values(res.data.timeline[chart]),
-                            fill: false,
-                            borderColor: color,
-                            pointBackgroundColor: color
-                        });
-                    });
-                }).finally(() => {
-                    this.loadingCharts = false;
-                });
-            }
-        }
+    computed: {
+        ...mapState(['countries'])
     }
 }
 </script>
