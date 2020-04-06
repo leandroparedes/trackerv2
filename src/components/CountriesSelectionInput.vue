@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-autocomplete
-            v-model="values"
+            v-model="countriesData"
             :items="items"
             outlined
             small-chips
@@ -31,15 +31,19 @@ import { mapState } from 'vuex';
 export default {
     name: 'CountriesSelectionInput',
 
+    props: ['selected-countries'],
+
     data: function () {
         return {
             searchInput: '',
-            values: [],
+            countriesData: [],
             items: []
         }
     },
 
     mounted () {
+        this.countriesData = this.selectedCountries;
+
         this.countries.data.map(country => {
             this.items.push({
                 text: country.country,
@@ -50,7 +54,7 @@ export default {
 
     methods: {
         handleRemove: function (removed) {
-            this.values = this.values.filter(v => v != removed);
+            this.countriesData = this.countriesData.filter(c => c != removed);
         }
     },
 
@@ -59,7 +63,7 @@ export default {
     },
 
     watch: {
-        values: function (newValues, oldValues) {
+        countriesData: function (newValues, oldValues) {
             if (newValues.length === 0) {
                 this.$emit('countries-cleared');
                 return;
@@ -71,9 +75,14 @@ export default {
                 return;
             }
 
-            if (newValues.length > oldValues.length) {
+            if (newValues.length - oldValues.length === 1) {
                 const addedCountry = newValues.length > 0 ? newValues[newValues.length -1] : newValues[0];
                 this.$emit('country-added', addedCountry);
+                return;
+            }
+
+            if (newValues.length - oldValues.length > 1) {
+                newValues.map(v => this.$emit('country-added', v));
                 return;
             }
         }

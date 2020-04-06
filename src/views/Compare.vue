@@ -5,6 +5,7 @@
         </div>
 
         <countries-selection-input
+            :selected-countries="selectedCountries"
             @countries-cleared="handleCountriesCleared"
             @country-added="handleCountryAdded"
             @country-removed="handleCountryRemoved"
@@ -120,7 +121,7 @@ export default {
     data: function () {
         return {
             dataAdded: false,
-            values: [],
+            selectedCountries: [],
 
             chartTypes: ['linear', 'logarithmic'],
             
@@ -170,6 +171,7 @@ export default {
 
     mounted () {
         this.$store.dispatch('fetch_countries_data');
+        this.loadCountriesFromQueryString();
     },
 
     methods: {
@@ -234,7 +236,7 @@ export default {
         loadCountriesFromQueryString: function () {
             const c = this.$route.query.c;
             const countries = c ? c.split(';') : [];
-            countries.map(country => this.values.push(country));
+            countries.map(country => this.selectedCountries.push(country));
         },
 
         addCountryToQueryString: function (countryCode) {
