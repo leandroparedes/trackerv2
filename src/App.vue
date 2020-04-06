@@ -23,7 +23,7 @@
         </v-app-bar>
         <v-content>
             <v-container class="mt-4">
-                <router-view :key="$route.fullPath"></router-view>
+                <router-view :key="$route.path"></router-view>
             </v-container>
         </v-content>
 

@@ -186,6 +186,14 @@ export default {
         this.$store.dispatch('fetch_countries_data');
         const countries = this.$store.state.countries.data;
         countries.map(country => this.items.push(country.country));
+
+        const queryString = this.$route.query.c;
+        let countriesQueryString = queryString ? queryString.split(';') : [];
+        countriesQueryString.map(country => {
+            setTimeout(() => {
+                this.values.push(country);
+            }, 0)
+        });
     },
 
     methods: {
@@ -227,6 +235,10 @@ export default {
                 this.colorPool.map(color => {
                     color.country = null;
                 });
+
+                this.$router.push({
+                    path: '/compare'
+                });
             } else if (newValues.length < oldValues.length) {
                 const removed = oldValues.filter(c => !newValues.includes(c))[0];
 
@@ -235,6 +247,14 @@ export default {
                 });
 
                 this.countriesInfo = this.countriesInfo.filter(c => c.country.name != removed);
+
+                const queryString = this.$route.query.c;
+                let countriesQueryString = queryString ? queryString.split(';') : [];
+                countriesQueryString = countriesQueryString.filter(c => c != removed);
+                this.$router.push({
+                    path: '/compare',
+                    query: { c: countriesQueryString.join(';') }
+                });
             } else {
                 this.loadingCharts = true;
 
@@ -257,6 +277,17 @@ export default {
                     tests: country.tests,
                     testsPerMillion: country.testsPerOneMillion,
                 });
+
+                const queryString = this.$route.query.c;
+                const countriesQueryString = queryString ? queryString.split(';') : [];
+                if (! countriesQueryString.includes(lastAddedCountry)) {
+                    countriesQueryString.push(lastAddedCountry);
+
+                    this.$router.push({
+                        path: '/compare',
+                        query: { c: countriesQueryString.join(';') }
+                    });
+                }
 
                 const color = this.getColor(lastAddedCountry);
 

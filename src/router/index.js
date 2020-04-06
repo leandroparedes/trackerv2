@@ -52,10 +52,26 @@ const routes = [
     }
 ];
 
+const qs = require('qs');
+
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes
+    routes,
+    parseQuery(query) {
+        return qs.parse(query);
+    },
+    stringifyQuery(query) {
+        // in compare the countries needs to be
+        // a string separated by ;
+        // this return the string without encoding
+        if (query.c) {
+            return '?c=' + query.c;
+        }
+
+        var result = qs.stringify(query);
+        return result ? ('?' + result) : '';
+    }
 });
 
 const DEFAULT_TITLE = 'Covid-T';
