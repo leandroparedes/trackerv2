@@ -2,6 +2,7 @@
     <v-data-table
         :headers="headers"
         :items="countries"
+        :items-per-page="$vuetify.breakpoint.mdAndDown ? 1 : 10"
     >
         <template v-slot:item.country="{ item }">
             <v-avatar size="18" class="mr-1">
