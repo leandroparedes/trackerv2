@@ -41,7 +41,7 @@
                 </v-col>
             </v-row>
 
-            <v-card>
+            <v-card class="mb-8">
                 <v-card-title class="pl-4">More information</v-card-title>
                 <countries-data-table
                     :countries="countriesInfo"
