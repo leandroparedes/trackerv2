@@ -116,6 +116,25 @@
             </v-col>
         </v-row>
 
+        <v-card class="mb-8">
+            <v-card-title class="pl-4">
+                All countries
+                <v-spacer></v-spacer>
+                <v-text-field
+                    v-model="search"
+                    append-icon="mdi-magnify"
+                    label="Search"
+                    single-line
+                    hide-details
+                    class="my-3 my-md-0"
+                ></v-text-field>
+            </v-card-title>
+            <countries-data-table
+                :countries="countries.data"
+                :search="search"
+            ></countries-data-table>
+        </v-card>
+
         <div class="text-center mt-4 mb-8">
             <div class="primary--text mb-1">Last updated {{ global.totals.updated | moment('from', 'now') }}</div>
             <div class="grey--text">{{ new Date(global.totals.updated) }}</div>
@@ -127,13 +146,21 @@
 import { mapState, mapGetters } from 'vuex';
 import InfoCard from '@/components/InfoCard.vue';
 import HistoricalChart from '@/components/HistoricalChart.vue';
+import CountriesDataTable from '@/components/CountriesDataTable.vue';
 
 export default {
     name: 'Home',
 
     components: {
         InfoCard,
-        HistoricalChart
+        HistoricalChart,
+        CountriesDataTable
+    },
+
+    data: function () {
+        return {
+            search: ''
+        }
     },
 
     mounted () {
@@ -151,7 +178,7 @@ export default {
     },
 
     computed: {
-        ...mapState(['global']),
+        ...mapState(['global', 'countries']),
 
         ...mapGetters(['mostAffectedCountries']),
 
