@@ -42,8 +42,20 @@
             </v-row>
 
             <v-card class="mb-8">
-                <v-card-title class="pl-4">More information</v-card-title>
+                <v-card-title class="pl-4">
+                    More information
+                    <v-spacer></v-spacer>
+                    <v-text-field
+                        v-model="search"
+                        append-icon="mdi-magnify"
+                        label="Search"
+                        single-line
+                        hide-details
+                        class="my-3 my-md-0"
+                    ></v-text-field>
+                </v-card-title>
                 <countries-data-table
+                    :search="search"
                     :countries="countriesInfo"
                 ></countries-data-table>
             </v-card>
@@ -73,6 +85,8 @@ export default {
 
     data: function () {
         return {
+            search: '',
+
             dataAdded: false,
             selectedCountries: [],
 
