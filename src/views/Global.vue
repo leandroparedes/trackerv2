@@ -116,19 +116,20 @@
             </v-col>
         </v-row>
 
+        <div class="d-md-flex justify-space-between mb-6">
+            <div class="headline font-weight-black text-uppercase">All countries</div>
+            <v-spacer></v-spacer>
+            <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+                clearable
+                class="my-4 pt-0 my-md-0"
+            ></v-text-field>
+        </div>
         <v-card class="mb-8">
-            <v-card-title class="pl-4">
-                All countries
-                <v-spacer></v-spacer>
-                <v-text-field
-                    v-model="search"
-                    append-icon="mdi-magnify"
-                    label="Search"
-                    single-line
-                    hide-details
-                    class="my-3 my-md-0"
-                ></v-text-field>
-            </v-card-title>
             <countries-data-table
                 :countries="countries.data"
                 :search="search"
