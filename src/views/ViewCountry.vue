@@ -168,7 +168,6 @@ export default {
             const statesUrl = `https://corona.lmao.ninja/states`;
 
             this.axios.get(statesUrl).then(res => {
-                console.log(res.data);
                 this.USStates = res.data;
             });
         }
