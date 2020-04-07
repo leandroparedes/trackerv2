@@ -247,7 +247,7 @@ export default {
                 this.charts[chart].datasets = this.charts[chart].datasets.filter(d => d.label != country.country);
             });
 
-            this.countriesInfo = this.countriesInfo.filter(c => c.country.name != country.country);
+            this.countriesInfo = this.countriesInfo.filter(c => c.country != country.country);
 
             this.removeCountryFromQueryString(countryCode);
         }
