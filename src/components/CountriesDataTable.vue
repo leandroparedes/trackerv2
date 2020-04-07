@@ -2,6 +2,7 @@
     <v-data-table
         :headers="headers"
         :items="countries"
+        :search="search"
         mobile-breakpoint="0"
     >
         <template v-slot:item.country="{ item }">
@@ -57,7 +58,7 @@
 export default {
     name: 'CountriesDataTable',
 
-    props: ['countries'],
+    props: ['countries', 'search'],
 
     data: function () {
         return {
