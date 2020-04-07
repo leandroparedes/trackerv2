@@ -95,6 +95,28 @@
             </v-col>
         </v-row>
 
+        <div v-if="$route.params.countryCode == 'US'">
+            <div class="d-md-flex justify-space-between mb-6 mt-8">
+                <div class="headline font-weight-black text-uppercase">All states</div>
+                <v-spacer></v-spacer>
+                <v-text-field
+                    v-model="search"
+                    append-icon="mdi-magnify"
+                    label="Search"
+                    single-line
+                    hide-details
+                    clearable
+                    class="my-4 pt-0 my-md-0"
+                ></v-text-field>
+            </div>
+            <v-card class="mb-8">
+                <states-data-table
+                    :states="USStates"
+                    :search="search"
+                ></states-data-table>
+            </v-card>
+        </div>
+
         <div class="text-center mt-4 mb-8">
             <div class="primary--text mb-1">Last updated {{ country.info.updated | moment('from', 'now') }}</div>
             <div class="grey--text">{{ new Date(country.info.updated) }}</div>
@@ -105,19 +127,26 @@
 <script>
 import InfoCard from '@/components/InfoCard.vue';
 import HistoricalChart from '@/components/HistoricalChart.vue';
+import StatesDataTable from '@/components/StatesDataTable.vue';
 
 export default {
     name: 'ViewCountry',
 
-    components: { InfoCard, HistoricalChart },
+    components: {
+        InfoCard,
+        HistoricalChart,
+        StatesDataTable
+    },
 
     data: function () {
         return {
+            search: '',
             loaded: false,
             country: {
                 info: {},
                 historical: {}
-            }
+            },
+            USStates: []
         }
     },
 
@@ -134,6 +163,15 @@ export default {
             this.country.historical = historical.data;
             this.country.info.population = population.data.population;
         })).finally(() => this.loaded = true);
+
+        if (countryCode == 'US') {
+            const statesUrl = `https://corona.lmao.ninja/states`;
+
+            this.axios.get(statesUrl).then(res => {
+                console.log(res.data);
+                this.USStates = res.data;
+            });
+        }
     },
 
     computed: {
