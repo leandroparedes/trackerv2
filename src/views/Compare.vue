@@ -163,15 +163,16 @@ export default {
         loadInfoData: function (countryCode) {
             const country = this.countries.data.find(c => c.countryInfo.iso2 == countryCode);
             this.countriesInfo.push({
-                country: { name: country.country, flag: country.countryInfo.flag },
+                country: country.country,
+                countryInfo: { flag: country.countryInfo.flag },
                 cases: country.cases,
-                casesPerMillion: country.casesPerOneMillion,
+                casesPerOneMillion: country.casesPerOneMillion,
                 critical: country.critical,
                 recovered: country.recovered,
                 deaths: country.deaths,
-                deathsPerMillion: country.deathsPerOneMillion,
+                deathsPerOneMillion: country.deathsPerOneMillion,
                 tests: country.tests,
-                testsPerMillion: country.testsPerOneMillion,
+                testsPerOneMillion: country.testsPerOneMillion,
             });
         },
 

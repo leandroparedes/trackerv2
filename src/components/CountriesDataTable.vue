@@ -6,18 +6,18 @@
     >
         <template v-slot:item.country="{ item }">
             <v-avatar size="18" class="mr-1">
-                <img :src="item.country.flag">
+                <img :src="item.countryInfo.flag">
             </v-avatar>
-            {{ item.country.name }}
+            {{ item.country }}
         </template>
         <template v-slot:item.cases="{ item }">
             <span class="text-center">
                 {{ item.cases | formatNumber }}
             </span>
         </template>
-        <template v-slot:item.casesPerMillion="{ item }">
+        <template v-slot:item.casesPerOneMillion="{ item }">
             <div class="text-center">
-                {{ item.casesPerMillion | formatNumber }}
+                {{ item.casesPerOneMillion | formatNumber }}
             </div>
         </template>
         <template v-slot:item.critical="{ item }">
@@ -35,9 +35,9 @@
                 {{ item.deaths | formatNumber }}
             </span>
         </template>
-        <template v-slot:item.deathsPerMillion="{ item }">
+        <template v-slot:item.deathsPerOneMillion="{ item }">
             <span class="text-center">
-                {{ item.deathsPerMillion | formatNumber }}
+                {{ item.deathsPerOneMillion | formatNumber }}
             </span>
         </template>
         <template v-slot:item.tests="{ item }">
@@ -45,9 +45,9 @@
                 {{ item.tests | formatNumber }}
             </span>
         </template>
-        <template v-slot:item.testsPerMillion="{ item }">
+        <template v-slot:item.testsPerOneMillion="{ item }">
             <span class="text-center">
-                {{ item.testsPerMillion | formatNumber }}
+                {{ item.testsPerOneMillion | formatNumber }}
             </span>
         </template>
     </v-data-table>
@@ -64,13 +64,13 @@ export default {
             headers: [
                 { text: 'Country', value: 'country', sortable: false },
                 { text: 'Cases', value: 'cases', align: 'center' },
-                { text: 'Cases per million', value: 'casesPerMillion', align: 'center' },
+                { text: 'Cases per million', value: 'casesPerOneMillion', align: 'center' },
                 { text: 'Critical', value: 'critical', align: 'center' },
                 { text: 'Recovered', value: 'recovered', align: 'center' },
                 { text: 'Deaths', value: 'deaths', align: 'center' },
-                { text: 'Deaths per million', value: 'deathsPerMillion', align: 'center' },
+                { text: 'Deaths per million', value: 'deathsPerOneMillion', align: 'center' },
                 { text: 'Tests', value: 'tests', align: 'center' },
-                { text: 'Tests per million', value: 'testsPerMillion', align: 'center' },
+                { text: 'Tests per million', value: 'testsPerOneMillion', align: 'center' },
             ]
         }
     }
