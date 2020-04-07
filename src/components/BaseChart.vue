@@ -23,6 +23,9 @@ export default {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: {
+                    duration: 0
+                },
                 elements: {
                     point: {
                         radius: 1
@@ -36,7 +39,8 @@ export default {
                 },
                 hover: {
                     mode: 'index',
-                    intersect: false
+                    intersect: false,
+                    animationDuration: 0
                 },
                 tooltips: {
                     mode: 'index',
@@ -48,7 +52,12 @@ export default {
                     titleMarginBottom: 10,
                     bodySpacing: 10,
                     bodyFontSize: 14,
+                    xPadding: 10,
+                    yPadding: 10,
                     callbacks: {
+                        title: (tooltipItem, data) => {
+                            return this.$moment(tooltipItem[0].xLabel).format('MMMM Do, YYYY');
+                        },
                         label: function (tooltipItem, data) {
                             return ' ' + data.datasets[tooltipItem.datasetIndex].label + ': ' + Intl.NumberFormat().format(tooltipItem.yLabel);
                         }
