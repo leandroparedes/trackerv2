@@ -131,6 +131,7 @@
         </div>
         <v-card class="mb-8">
             <countries-data-table
+                v-if="countries.loaded"
                 :countries="countries.data"
                 :search="search"
             ></countries-data-table>

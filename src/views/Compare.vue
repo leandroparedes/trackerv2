@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="countries.loaded">
         <div class="text-center">
             <div class="display-2 font-weight-black">COMPARE</div>
         </div>
