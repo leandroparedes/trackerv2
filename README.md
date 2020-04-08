@@ -1,24 +1,8 @@
-# vue-cli-boilerplate
+# Covid-T
+## Coronavirus tracker, country data comparison and timeline.
 
-## Includes
-* Router
-* Store (with vuex-persistedstate)
-* Axios (with vue-axios)
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Features
+  - Global status
+  - Status per country
+  - Compare status between countries
+  - Timeline of WHO reports
