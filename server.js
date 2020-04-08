@@ -3,6 +3,16 @@ const app = express();
 
 app.use(express.static(__dirname + "/dist/"));
 
+app.use(function (req, res, next) {
+    if (req.headers.host == 'covid-t.herokuapp.com') {
+        res.writeHead(301, {
+            Location: 'http://the-covid-tracker.live'
+        });
+    } else {
+        next();
+    }
+});
+
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
