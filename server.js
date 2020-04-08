@@ -4,7 +4,7 @@ const app = express();
 app.use(express.static(__dirname + "/dist/"));
 
 app.use(function (req, res, next) {
-    if (req.headers.host == 'covid-t.herokuapp.com') {
+    if (req.hostname == 'covid-t.herokuapp.com') {
         res.writeHead(301, {
             Location: 'http://the-covid-tracker.live'
         });
