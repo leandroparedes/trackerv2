@@ -8,6 +8,7 @@ app.use(function (req, res, next) {
         res.writeHead(301, {
             Location: 'http://the-covid-tracker.live'
         });
+        res.end();
     } else {
         next();
     }
