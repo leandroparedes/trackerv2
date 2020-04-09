@@ -140,6 +140,7 @@
                 v-if="countries.loaded"
                 :countries="countries.data"
                 :search="search"
+                @click-row="handleClickRow"
             ></countries-data-table>
         </v-card>
 
@@ -178,6 +179,13 @@ export default {
 
     methods: {
         view: function (countryCode) {
+            this.$router.push({
+                name: 'ViewCountry',
+                params: { countryCode: countryCode }
+            });
+        },
+
+        handleClickRow: function (countryCode) {
             this.$router.push({
                 name: 'ViewCountry',
                 params: { countryCode: countryCode }

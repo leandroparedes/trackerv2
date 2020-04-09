@@ -4,6 +4,7 @@
         :items="countries"
         :search="search"
         mobile-breakpoint="0"
+        @click:row="handleClick"
     >
         <template v-slot:item.country="{ item }">
             <v-avatar size="18" class="mr-1">
@@ -73,6 +74,12 @@ export default {
                 { text: 'Tests', value: 'tests', align: 'center' },
                 { text: 'Tests per million', value: 'testsPerOneMillion', align: 'center' },
             ]
+        }
+    },
+
+    methods: {
+        handleClick: function (value) {
+            this.$emit('click-row', value.countryInfo.iso2);
         }
     }
 }
