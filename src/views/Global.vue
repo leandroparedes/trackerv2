@@ -21,6 +21,10 @@
                         <span class="error--text">
                             {{ global.totals.casesPerOneMillion | formatNumber }} per million
                         </span>
+                        <span class="font-weight-bold mx-1">&middot;</span>
+                        <span class="info--text">
+                            {{ global.totals.tests | formatNumber }} tested
+                        </span>
                     </template>
                 </info-card>
             </v-col>
@@ -31,7 +35,9 @@
                     <template v-slot:icon>fas fa-head-side-mask</template>
                     <template v-slot:count-total>{{ global.totals.active | formatNumber }}</template>
                     <template v-slot:additional-info>
-                        <span class="error--text">  {{ global.totals.critical | formatNumber }} in critical condition</span>
+                        <span class="error--text">
+                            {{ global.totals.critical | formatNumber }} in critical condition
+                        </span>
                     </template>
                 </info-card>
             </v-col>
