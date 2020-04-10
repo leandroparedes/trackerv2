@@ -7,7 +7,7 @@
             </div>
         </div>
 
-        <v-row class="mt-6 mb-8">
+        <v-row class="mt-6">
             <v-col cols="12" sm="6" lg="3">
                 <info-card color="#424242">
                     <template v-slot:title>Cases</template>
@@ -73,7 +73,42 @@
             </v-col>
         </v-row>
 
-        <div class="d-md-flex justify-space-between mb-6">
+        <v-row>
+            <v-col cols="12" md="6">
+                <v-card class="pa-4">
+                    <div class="title pb-2">Linear</div>
+                    <historical-chart
+                        v-if="chartLoaded"
+                        :chart-data="historicalData"
+                        type="linear"
+                    ></historical-chart>
+                    <div v-else class="d-flex justify-center align-center" style="height: 50vh;">
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                        ></v-progress-circular>
+                    </div>
+                </v-card>
+            </v-col>
+            <v-col cols="12" md="6">
+                <v-card class="pa-4">
+                    <div class="title pb-2">Logarithmic</div>
+                    <historical-chart
+                        v-if="chartLoaded"
+                        :chart-data="historicalData"
+                        type="logarithmic"
+                    ></historical-chart>
+                    <div v-else class="d-flex justify-center align-center" style="height: 50vh;">
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                        ></v-progress-circular>
+                    </div>
+                </v-card>
+            </v-col>
+        </v-row>
+
+        <div class="d-md-flex justify-space-between mt-8 mb-6">
             <div class="headline font-weight-black text-uppercase">Countries</div>
             <v-spacer></v-spacer>
             <v-text-field
@@ -101,13 +136,15 @@
 import { mapState } from 'vuex';
 import InfoCard from '@/components/InfoCard.vue';
 import CountriesDataTable from '@/components/CountriesDataTable.vue';
+import historicalChart from '@/components/HistoricalChart.vue';
 
 export default {
     name: 'ViewRegion',
 
     components: {
         InfoCard,
-        CountriesDataTable
+        CountriesDataTable,
+        historicalChart
     },
 
     data: function () {
@@ -121,11 +158,17 @@ export default {
             recovered: 0,
             deaths: 0,
             todayDeaths: 0,
-            tests: 0
+            tests: 0,
+
+            historicalCases: {},
+            historicalRecovered: {},
+            historicalDeaths: {},
+            chartLoaded: false
         }
     },
 
     mounted () {
+        this.chartLoaded = false;
         this.$store.dispatch('fetch_countries_data');
 
         const regions = require('../../regions.json');
@@ -152,6 +195,27 @@ export default {
             this.regionCountries = this.regionCountries.sort((a, b) => {
                 return b.cases - a.cases;
             });
+
+            let countries = region.codes.join(',');
+
+            const url = `https://corona.lmao.ninja/v2/historical/${countries}?lastdays=all`;
+
+            this.axios.get(url).then(res => {
+                const countriesData = res.data.filter(c => c.country);
+                countriesData.map(c => {
+                    Object.keys(c.timeline.cases).map(d => {
+                        this.historicalCases[d] = (this.historicalCases[d] || 0) + c.timeline.cases[d];
+                    });
+
+                    Object.keys(c.timeline.recovered).map(r => {
+                        this.historicalRecovered[r] = (this.historicalRecovered[r] || 0) + c.timeline.recovered[r];
+                    });
+
+                    Object.keys(c.timeline.deaths).map(d => {
+                        this.historicalDeaths[d] = (this.historicalDeaths[d] || 0) + c.timeline.deaths[d];
+                    });
+                });
+            }).finally(() => this.chartLoaded = true);
         } else {
             this.$router.push('/global');
         }
@@ -167,7 +231,39 @@ export default {
     },
 
     computed: {
-        ...mapState(['countries'])
+        ...mapState(['countries']),
+
+        historicalData: function () {
+            let chartData = { labels: null, datasets: [] };
+
+            chartData.labels = Object.keys(this.historicalCases);
+
+            chartData.datasets.push({
+                label: 'Cases',
+                data: Object.values(this.historicalCases),
+                fill: false,
+                borderColor: '#707070',
+                pointBackgroundColor: '#707070',
+            });
+
+            chartData.datasets.push({
+                label: 'Recovered',
+                data: Object.values(this.historicalRecovered),
+                fill: false,
+                borderColor: '#4caf50',
+                pointBackgroundColor: '#4caf50'
+            });
+
+            chartData.datasets.push({
+                label: 'Deaths',
+                data: Object.values(this.historicalDeaths),
+                fill: false,
+                borderColor: '#ff5252',
+                pointBackgroundColor: '#ff5252',
+            });
+
+            return chartData;
+        }
     }
 }
 </script>
