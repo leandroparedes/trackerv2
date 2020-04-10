@@ -222,38 +222,13 @@ export default {
 
     data: function () {
         return {
-            search: '',
-            regions: []
+            search: ''
         }
     },
 
     mounted () {
         this.$store.dispatch('fetch_global_data');
         this.$store.dispatch('fetch_countries_data');
-
-        const regions = require('../../regions.json');
-        regions.map(region => {
-            const name = region.name;
-            let cases = 0;
-            let todayCases = 0;
-            let critical = 0;
-            let active = 0;
-
-            region.codes.map(code => {
-                const country = this.countries.data.find(c => c.countryInfo.iso2 == code);
-            
-                if (country) {
-                    cases += country.cases;
-                    todayCases += country.todayCases;
-                    critical += country.critical;
-                    active += country.active;
-                }
-            });
-
-            this.regions.push({
-                name, cases, todayCases, critical, active
-            });
-        });
     },
 
     methods: {
@@ -314,6 +289,39 @@ export default {
             });
 
             return chartData;
+        },
+
+        regions: function () {
+            if (this.countries.loaded) {
+                const regionsData = require('../../regions.json');
+
+                let regions = [];
+
+                regionsData.map(region => {
+                    const name = region.name;
+                    let cases = 0;
+                    let todayCases = 0;
+                    let critical = 0;
+                    let active = 0;
+
+                    region.codes.map(code => {
+                        const country = this.countries.data.find(c => c.countryInfo.iso2 == code);
+                    
+                        if (country) {
+                            cases += country.cases;
+                            todayCases += country.todayCases;
+                            critical += country.critical;
+                            active += country.active;
+                        }
+                    });
+
+                    regions.push({
+                        name, cases, todayCases, critical, active
+                    });
+                });
+                
+                return regions;
+            }
         }
     }
 }
