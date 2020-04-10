@@ -83,7 +83,12 @@ const router = new VueRouter({
 
 const DEFAULT_TITLE = 'Covid-T';
 
-router.afterEach((to, from ) => {
+router.beforeEach((to, from, next) => {
+    window.scrollTo(0, 0);
+    next();
+});
+
+router.afterEach((to, from) => {
     Vue.nextTick(() => {
         document.title = `${to.meta.title} | Covid-19 Tracker` || DEFAULT_TITLE;
     });
