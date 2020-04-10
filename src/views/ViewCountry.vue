@@ -80,7 +80,7 @@
             </v-col>
         </v-row>
 
-        <v-row>
+        <v-row v-if="country.historical">
             <v-col cols="12" lg="6">
                 <v-card class="pa-4">
                     <div class="title pb-2">Linear</div>
@@ -94,6 +94,10 @@
                 </v-card>
             </v-col>
         </v-row>
+        <v-card v-else class="text-center grey--text pa-10 mt-3 mb-8">
+            <v-icon color="grey" size="50">fas fa-chart-bar</v-icon>
+            <div class="mt-4 title">There is not timeline data for this country</div>
+        </v-card>
 
         <div v-if="$route.params.countryCode == 'US'">
             <div class="d-md-flex justify-space-between mb-6 mt-8">
@@ -154,9 +158,9 @@ export default {
         this.loaded = false;
 
         const countryCode = this.$route.params.countryCode;
-        const infoUrl = this.axios.get(`https://corona.lmao.ninja/countries/${countryCode}`);
-        const historicalUrl =  this.axios.get(`https://corona.lmao.ninja/v2/historical/${countryCode}?lastdays=all`);
-        const populationUrl = this.axios.get(`https://restcountries.eu/rest/v2/alpha/${countryCode}?fields=population`);
+        const infoUrl = this.axios.get(`https://corona.lmao.ninja/countries/${countryCode}`).catch(err => err);
+        const historicalUrl =  this.axios.get(`https://corona.lmao.ninja/v2/historical/${countryCode}?lastdays=all`).catch(err => err);
+        const populationUrl = this.axios.get(`https://restcountries.eu/rest/v2/alpha/${countryCode}?fields=population`).catch(err => err);
 
         this.axios.all([infoUrl, historicalUrl, populationUrl]).then(this.axios.spread((info, historical, population) => {
             this.country.info = info.data;
