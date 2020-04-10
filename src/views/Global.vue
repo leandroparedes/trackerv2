@@ -137,7 +137,9 @@
                         v-if="region.todayCases"
                         v-slot:count-today
                     >
-                        +{{ region.todayCases | formatNumber }}
+                        <span class="error--text">
+                            +{{ region.todayCases | formatNumber }}
+                        </span>
                     </template>
                     <template v-slot:additional-info>
                         <span class="grey--text">
@@ -183,7 +185,9 @@
                         v-if="country.todayCases"
                         v-slot:count-today
                     >
-                        +{{ country.todayCases | formatNumber }}
+                        <span class="error--text">
+                            +{{ country.todayCases | formatNumber }}
+                        </span>
                     </template>
                     <template
                         v-slot:additional-info
