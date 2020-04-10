@@ -170,55 +170,6 @@ export default {
     mounted () {
         this.chartLoaded = false;
         this.$store.dispatch('fetch_countries_data');
-
-        const regions = require('../../regions.json');
-
-        const region = regions.find(r => r.name.toLowerCase() == this.$route.params.region.toLowerCase());
-
-        if (region) {
-            region.codes.map(code => {
-                const country = this.countries.data.find(c => c.countryInfo.iso2 == code);
-                if (country) {
-                    this.cases += country.cases;
-                    this.todayCases += country.todayCases;
-                    this.active += country.active;
-                    this.critical += country.critical;
-                    this.recovered += country.recovered;
-                    this.deaths += country.deaths;
-                    this.todayDeaths += country.todayDeaths;
-                    this.tests += country.tests;
-
-                    this.regionCountries.push(country);
-                }
-            });
-
-            this.regionCountries = this.regionCountries.sort((a, b) => {
-                return b.cases - a.cases;
-            });
-
-            let countries = region.codes.join(',');
-
-            const url = `https://corona.lmao.ninja/v2/historical/${countries}?lastdays=all`;
-
-            this.axios.get(url).then(res => {
-                const countriesData = res.data.filter(c => c.country);
-                countriesData.map(c => {
-                    Object.keys(c.timeline.cases).map(d => {
-                        this.historicalCases[d] = (this.historicalCases[d] || 0) + c.timeline.cases[d];
-                    });
-
-                    Object.keys(c.timeline.recovered).map(r => {
-                        this.historicalRecovered[r] = (this.historicalRecovered[r] || 0) + c.timeline.recovered[r];
-                    });
-
-                    Object.keys(c.timeline.deaths).map(d => {
-                        this.historicalDeaths[d] = (this.historicalDeaths[d] || 0) + c.timeline.deaths[d];
-                    });
-                });
-            }).finally(() => this.chartLoaded = true);
-        } else {
-            this.$router.push('/global');
-        }
     },
 
     methods: {
@@ -263,6 +214,59 @@ export default {
             });
 
             return chartData;
+        }
+    },
+
+    watch: {
+        'countries.loaded': function () {
+            if (this.countries.loaded) {
+                const regions = require('../../regions.json');
+                const region = regions.find(r => r.name.toLowerCase() == this.$route.params.region.toLowerCase());
+                if (region) {
+                    region.codes.map(code => {
+                        const country = this.countries.data.find(c => c.countryInfo.iso2 == code);
+                        if (country) {
+                            this.cases += country.cases;
+                            this.todayCases += country.todayCases;
+                            this.active += country.active;
+                            this.critical += country.critical;
+                            this.recovered += country.recovered;
+                            this.deaths += country.deaths;
+                            this.todayDeaths += country.todayDeaths;
+                            this.tests += country.tests;
+
+                            this.regionCountries.push(country);
+                        }
+                    });
+
+                    this.regionCountries = this.regionCountries.sort((a, b) => {
+                        return b.cases - a.cases;
+                    });
+
+                    let countries = region.codes.join(',');
+
+                    const url = `https://corona.lmao.ninja/v2/historical/${countries}?lastdays=all`;
+
+                    this.axios.get(url).then(res => {
+                        const countriesData = res.data.filter(c => c.country);
+                        countriesData.map(c => {
+                            Object.keys(c.timeline.cases).map(d => {
+                                this.historicalCases[d] = (this.historicalCases[d] || 0) + c.timeline.cases[d];
+                            });
+
+                            Object.keys(c.timeline.recovered).map(r => {
+                                this.historicalRecovered[r] = (this.historicalRecovered[r] || 0) + c.timeline.recovered[r];
+                            });
+
+                            Object.keys(c.timeline.deaths).map(d => {
+                                this.historicalDeaths[d] = (this.historicalDeaths[d] || 0) + c.timeline.deaths[d];
+                            });
+                        });
+                    }).finally(() => this.chartLoaded = true);
+                } else {
+                    this.$router.push('/global');
+                }
+            }
         }
     }
 }
