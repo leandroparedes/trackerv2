@@ -11,7 +11,7 @@
         </v-card-subtitle>
         <v-card-text class="headline pb-1">
             <slot name="count-total">0</slot>
-            <span class="body-1 font-weight-bold success--text ml-1">
+            <span class="body-1 font-weight-bold ml-1">
                 <slot name="count-today"></slot>
             </span>
         </v-card-text>

@@ -22,7 +22,9 @@
                         v-if="country.info.todayCases"
                         v-slot:count-today
                     >
-                        +{{ country.info.todayCases | formatNumber }}
+                        <span class="error--text">
+                            +{{ country.info.todayCases | formatNumber }}
+                        </span>
                     </template>
                     <template v-slot:additional-info>
                         <span class="error--text">
@@ -69,7 +71,9 @@
                         v-if="country.info.todayDeaths"
                         v-slot:count-today
                     >
-                        +{{ country.info.todayDeaths | formatNumber }}
+                        <span class="error--text">
+                            +{{ country.info.todayDeaths | formatNumber }}
+                        </span>
                     </template>
                     <template v-slot:additional-info>
                         <span class="error--text">

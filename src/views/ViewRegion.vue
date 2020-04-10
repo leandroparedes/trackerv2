@@ -17,7 +17,9 @@
                         v-if="todayCases > 0"
                         v-slot:count-today
                     >
-                        +{{ todayCases | formatNumber }}
+                        <span class="error--text">
+                            +{{ todayCases | formatNumber }}
+                        </span>
                     </template>
                     <template v-slot:additional-info>
                         <span class="info--text">
@@ -62,7 +64,9 @@
                         v-if="todayDeaths > 0"
                         v-slot:count-today
                     >
-                        +{{ todayDeaths | formatNumber }}
+                        <span class="error--text">
+                            +{{ todayDeaths | formatNumber }}
+                        </span>
                     </template>
                     <template v-slot:additional-info>
                         <span class="error--text">

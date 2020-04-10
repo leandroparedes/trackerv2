@@ -15,7 +15,9 @@
                         v-if="global.totals.todayCases > 0"
                         v-slot:count-today
                     >
-                        +{{ global.totals.todayCases | formatNumber }}
+                        <span class="error--text">
+                            +{{ global.totals.todayCases | formatNumber }}
+                        </span>
                     </template>
                     <template v-slot:additional-info>
                         <span class="error--text">
@@ -34,6 +36,17 @@
                     <template v-slot:title>Actives</template>
                     <template v-slot:icon>fas fa-head-side-mask</template>
                     <template v-slot:count-total>{{ global.totals.active | formatNumber }}</template>
+                    <template
+                        v-if="global.yesterdayTotals.active > 0"
+                        v-slot:count-today
+                    >
+                        <span v-if="todayActive > 0" class="error--text">
+                            +{{ todayActive | formatNumber }}
+                        </span>
+                        <span v-else class="success--text">
+                            {{ todayActive | formatNumber }}
+                        </span>
+                    </template>
                     <template v-slot:additional-info>
                         <span class="error--text">
                             {{ global.totals.critical | formatNumber }} in critical condition
@@ -47,6 +60,14 @@
                     <template v-slot:title>Recovered</template>
                     <template v-slot:icon>fas fa-heart</template>
                     <template v-slot:count-total>{{ global.totals.recovered |formatNumber }}</template>
+                    <template
+                        v-if="global.yesterdayTotals.recovered > 0"
+                        v-slot:count-today
+                    >
+                        <span class="success--text">
+                            +{{ todayRecovered | formatNumber }}
+                        </span>
+                    </template>
                     <template v-slot:additional-info>
                         <span class="success--text">
                             {{ Math.round((global.totals.recovered * 100) / global.totals.cases) }}% recovered
@@ -64,7 +85,9 @@
                         v-if="global.totals.todayDeaths > 0"
                         v-slot:count-today
                     >
-                        +{{ global.totals.todayDeaths | formatNumber }}
+                        <span class="error--text">
+                            +{{ global.totals.todayDeaths | formatNumber }}
+                        </span>
                     </template>
                     <template v-slot:additional-info>
                         <span class="error--text">
@@ -322,6 +345,14 @@ export default {
                 
                 return regions;
             }
+        },
+
+        todayActive: function () {
+            return this.global.totals.active - this.global.yesterdayTotals.active;
+        },
+
+        todayRecovered:function () {
+            return this.global.totals.recovered - this.global.yesterdayTotals.recovered;
         }
     }
 }
