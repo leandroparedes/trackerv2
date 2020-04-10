@@ -90,8 +90,45 @@
             </v-col>
         </v-row>
 
+        <v-divider class="mt-6"></v-divider>
+
         <div class="headline font-weight-black mt-8 mb-2 text-uppercase">
-            Most affected countries
+            <v-avatar color="secondary" size="20" class="mr-1 mb-1"></v-avatar> Regions
+        </div>
+
+        <v-row>
+            <v-col
+                cols="12" sm="6" md="3"
+                v-for="(region, index) in regions"
+                :key="index"
+            >
+                <info-card color="#424242">
+                    <template v-slot:title>{{ region.name }}</template>
+                    <template v-slot:subtitle>Cases</template>
+                    <template v-slot:count-total>{{ region.cases | formatNumber }}</template>
+                    <template
+                        v-if="region.todayCases"
+                        v-slot:count-today
+                    >
+                        +{{ region.todayCases | formatNumber }}
+                    </template>
+                    <template v-slot:additional-info>
+                        <span class="grey--text">
+                            {{ region.active | formatNumber }} active
+                        </span>
+                        <span class="font-weight-bold mx-1">&middot;</span>
+                        <span class="error--text">
+                            {{ region.critical | formatNumber }} critical
+                        </span>
+                    </template>
+                </info-card>
+            </v-col>
+        </v-row>
+
+        <v-divider class="mt-6"></v-divider>
+
+        <div class="headline font-weight-black mt-8 mb-2 text-uppercase">
+            <v-avatar color="error" size="20" class="mr-1 mb-1"></v-avatar> Most affected countries
         </div>
 
         <v-row v-if="mostAffectedCountries" class="mb-8">
@@ -100,7 +137,11 @@
                 v-for="(country, index) in mostAffectedCountries"
                 :key="index"
             >
-                <info-card @click.native="view(country.countryInfo.iso2)" style="cursor: pointer">
+                <info-card
+                    color="#ff5252"
+                    @click.native="view(country.countryInfo.iso2)"
+                    style="cursor: pointer"
+                >
                     <template v-slot:title>{{ country.country }}</template>
                     <template v-slot:subtitle>Cases</template>
                     <template v-slot:count-total>{{ country.cases | formatNumber }}</template>
@@ -121,6 +162,8 @@
                 </info-card>
             </v-col>
         </v-row>
+
+        <v-divider class="mt-6 mb-8"></v-divider>
 
         <div class="d-md-flex justify-space-between mb-6">
             <div class="headline font-weight-black text-uppercase">All countries</div>
@@ -168,13 +211,38 @@ export default {
 
     data: function () {
         return {
-            search: ''
+            search: '',
+            regions: []
         }
     },
 
     mounted () {
         this.$store.dispatch('fetch_global_data');
         this.$store.dispatch('fetch_countries_data');
+
+        const regions = require('../../regions.json');
+        regions.map(region => {
+            const name = region.name;
+            let cases = 0;
+            let todayCases = 0;
+            let critical = 0;
+            let active = 0;
+
+            region.codes.map(code => {
+                const country = this.countries.data.find(c => c.countryInfo.iso2 == code);
+            
+                if (country) {
+                    cases += country.cases;
+                    todayCases += country.todayCases;
+                    critical += country.critical;
+                    active += country.active;
+                }
+            });
+
+            this.regions.push({
+                name, cases, todayCases, critical, active
+            });
+        });
     },
 
     methods: {

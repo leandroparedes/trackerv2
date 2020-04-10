@@ -1,0 +1,65 @@
+[
+    {
+        "name": "Europe",
+        "codes": [
+            "AX", "AL", "AD", "AT", "BY", "BE", "BA",
+            "BG", "HR", "CY", "CZ", "DK", "EE", "FO",
+            "FI", "FR", "DE", "GI", "GR", "GG", "VA",
+            "HU", "IS", "IE", "IM", "IT", "JE", "LV",
+            "LI", "LT", "LU", "MK", "MT", "MD", "MC",
+            "ME", "NL", "NO", "PL", "PT", "XK", "RO",
+            "RU", "SM", "RS", "SK", "SI", "ES", "SJ",
+            "SE", "CH", "UA", "GB"
+        ]
+    },
+    {
+        "name": "Americas",
+        "codes": [
+            "AI", "AG", "AR", "AW", "BS", "BB", "BZ",
+            "BM", "BO", "BQ", "BR", "UM", "VG", "VI",
+            "CA", "KY", "CL", "CO", "CR", "CU", "CW",
+            "DM", "DO", "EC", "SV", "FK", "GF", "GL",
+            "GD", "GP", "GT", "GY", "HT", "HN", "JM",
+            "MQ", "MX", "MS", "NI", "PA", "PY", "PE",
+            "PR", "BL", "KN", "LC", "MF", "PM", "VC",
+            "SX", "GS", "SR", "TT", "TC", "US", "UY",
+            "VE"
+        ]
+    },
+    {
+        "name": "Asia",
+        "codes": [
+            "AF", "AM", "AZ", "BH", "BD", "BT", "BN",
+            "KH", "CN", "GE", "HK", "IN", "ID", "IR",
+            "IQ", "IL", "JP", "JO", "KZ", "KW", "KG",
+            "LA", "LB", "MO", "MY", "MV", "MN", "MM",
+            "NP", "KP", "OM", "PK", "PS", "PH", "QA",
+            "SA", "SG", "KR", "LK", "SY", "TW", "TJ",
+            "TH", "TL", "TR", "TM", "AE", "UZ", "VN",
+            "YE"
+        ]
+    },
+    {
+        "name": "Africa",
+        "codes": [
+            "DZ", "AO", "BJ", "BW", "IO", "BF", "BI",
+            "CM", "CV", "CF", "TD", "KM", "CG", "CD",
+            "DJ", "EG", "GQ", "ER", "ET", "TF", "GA",
+            "GM", "GH", "GN", "GW", "CI", "KE", "LS",
+            "LR", "LY", "MG", "MW", "ML", "MR", "MU",
+            "YT", "MA", "MZ", "NA", "NE", "NG", "RE",
+            "RW", "SH", "ST", "SN", "SC", "SL", "SO",
+            "ZA", "SS", "SD", "SZ", "TZ", "TG", "TN",
+            "UG", "EH", "ZM", "ZW"
+        ]
+    },
+    {
+        "name": "Oceania",
+        "codes": [
+            "AS", "AU", "CX", "CC", "CK", "FJ", "PF",
+            "GU", "KI", "MH", "FM", "NR", "NC", "NZ",
+            "NU", "NF", "MP", "PW", "PG", "PN", "WS",
+            "SB", "TK", "TO", "TV", "VU", "WF"
+        ]
+    }
+]
