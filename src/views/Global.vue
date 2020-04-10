@@ -142,7 +142,14 @@
                     @click.native="view(country.countryInfo.iso2)"
                     style="cursor: pointer"
                 >
-                    <template v-slot:title>{{ country.country }}</template>
+                    <template v-slot:title>
+                        <div class="mb-1">
+                            <v-avatar size="20" class="mr-1 mb-1">
+                                <img :src="country.countryInfo.flag">
+                            </v-avatar>
+                            {{ country.country }}
+                        </div>
+                    </template>
                     <template v-slot:subtitle>Cases</template>
                     <template v-slot:count-total>{{ country.cases | formatNumber }}</template>
                     <template
