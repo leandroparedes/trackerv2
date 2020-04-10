@@ -8,7 +8,7 @@
         <v-row class="mt-4">
             <v-col cols="12" sm="6" lg="3">
                 <info-card color="#424242">
-                    <template v-slot:title>Cases</template>
+                    <template v-slot:title>Total cases</template>
                     <template v-slot:icon>fas fa-globe-americas</template>
                     <template v-slot:count-total>{{ global.totals.cases | formatNumber }}</template>
                     <template
@@ -33,7 +33,7 @@
 
             <v-col cols="12" sm="6" lg="3">
                 <info-card color="#2196f3">
-                    <template v-slot:title>Actives</template>
+                    <template v-slot:title>Active cases</template>
                     <template v-slot:icon>fas fa-head-side-mask</template>
                     <template v-slot:count-total>{{ global.totals.active | formatNumber }}</template>
                     <template
@@ -292,7 +292,7 @@ export default {
             chartData.labels = Object.keys(this.global.historical.cases);
 
             chartData.datasets.push({
-                label: 'Cases',
+                label: 'Total cases',
                 data: Object.values(this.global.historical.cases),
                 fill: false,
                 borderColor: '#707070',
