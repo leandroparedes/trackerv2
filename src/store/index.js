@@ -53,7 +53,7 @@ export default new Vuex.Store({
         fetch_countries_data ({commit, state}) {
             commit('set_countries_loaded', false);
 
-            const countriesUrl = 'https://corona.lmao.ninja/countries';
+            const countriesUrl = 'https://corona.lmao.ninja/countries?sort=cases';
 
             Vue.axios.get(countriesUrl).then(res => {
                 commit('set_countries_data', res.data);
@@ -65,7 +65,7 @@ export default new Vuex.Store({
     getters: {
         mostAffectedCountries: (state) => {
             if (state.countries.data) {
-                return Object.values(state.countries.data).sort((a, b) => b.cases - a.cases).slice(0, 4);
+                return state.countries.data.slice(0, 4);
             }
         }
     }
