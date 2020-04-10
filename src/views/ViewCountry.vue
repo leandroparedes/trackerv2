@@ -96,7 +96,7 @@
         </v-row>
         <v-card v-else class="text-center grey--text pa-10 mt-3 mb-8">
             <v-icon color="grey" size="50">fas fa-chart-bar</v-icon>
-            <div class="mt-4 title">There is not timeline data for this country</div>
+            <div class="mt-4 title">There is no timeline data for this country</div>
         </v-card>
 
         <div v-if="$route.params.countryCode == 'US'">
