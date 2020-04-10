@@ -102,7 +102,11 @@
                 v-for="(region, index) in regions"
                 :key="index"
             >
-                <info-card color="#424242">
+                <info-card
+                    color="#424242"
+                    @click.native="viewRegion(region.name)"
+                    style="cursor: pointer"
+                >
                     <template v-slot:title>{{ region.name }}</template>
                     <template v-slot:subtitle>Cases</template>
                     <template v-slot:count-total>{{ region.cases | formatNumber }}</template>
@@ -139,7 +143,7 @@
             >
                 <info-card
                     color="#ff5252"
-                    @click.native="view(country.countryInfo.iso2)"
+                    @click.native="viewCountry(country.countryInfo.iso2)"
                     style="cursor: pointer"
                 >
                     <template v-slot:title>
@@ -253,10 +257,17 @@ export default {
     },
 
     methods: {
-        view: function (countryCode) {
+        viewCountry: function (countryCode) {
             this.$router.push({
                 name: 'ViewCountry',
                 params: { countryCode: countryCode }
+            });
+        },
+
+        viewRegion: function (region) {
+            this.$router.push({
+                name: 'ViewRegion',
+                params: { region: region.toLowerCase() }
             });
         },
 
