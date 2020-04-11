@@ -4,6 +4,7 @@
 - Features
   - Global status
   - Status per country
+  - Status per region
   - Compare status between countries
   - Timeline of WHO reports
 
