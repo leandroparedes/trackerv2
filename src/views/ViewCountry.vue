@@ -43,8 +43,20 @@
                     <template v-slot:title>Active cases</template>
                     <template v-slot:icon>fas fa-head-side-mask</template>
                     <template v-slot:count-total>{{ country.info.active | formatNumber }}</template>
+                    <template
+                        v-if="todayActive > 0"
+                        v-slot:count-today
+                    >
+                        <span v-if="todayActive > 0" class="error--text">
+                            +{{ todayActive | formatNumber }}
+                        </span>
+                        <span v-else class="success--text">
+                            {{ todayActive | formatNumber }}
+                        </span>
+                    </template>
                     <template v-slot:additional-info>
-                        <span class="error--text">  {{ country.info.critical | formatNumber }} in critical condition</span>
+                        <span class="error--text">
+                            {{ country.info.critical | formatNumber }} in critical condition</span>
                     </template>
                 </info-card>
             </v-col>
@@ -54,6 +66,14 @@
                     <template v-slot:title>Recovered</template>
                     <template v-slot:icon>fas fa-heart</template>
                     <template v-slot:count-total>{{ country.info.recovered |formatNumber }}</template>
+                    <template
+                        v-if="todayRecovered > 0"
+                        v-slot:count-today
+                    >
+                        <span class="success--text">
+                            +{{ todayRecovered | formatNumber }}
+                        </span>
+                    </template>
                     <template v-slot:additional-info>
                         <span class="success--text">
                             {{ Math.round((country.info.recovered * 100) / country.info.cases) }}% recovered
@@ -152,6 +172,7 @@ export default {
             loaded: false,
             country: {
                 info: {},
+                infoYesterday: {},
                 historical: {}
             },
             USStates: []
@@ -163,14 +184,17 @@ export default {
 
         const countryCode = this.$route.params.countryCode;
         const infoUrl = this.axios.get(`https://corona.lmao.ninja/countries/${countryCode}`).catch(err => err);
+        const infoYesterdayUrl = this.axios.get(`https://corona.lmao.ninja/v2/countries/${countryCode}?yesterday=true`).catch(err => err);
         const historicalUrl =  this.axios.get(`https://corona.lmao.ninja/v2/historical/${countryCode}?lastdays=all`).catch(err => err);
         const populationUrl = this.axios.get(`https://restcountries.eu/rest/v2/alpha/${countryCode}?fields=population`).catch(err => err);
 
-        this.axios.all([infoUrl, historicalUrl, populationUrl]).then(this.axios.spread((info, historical, population) => {
-            this.country.info = info.data;
-            this.country.historical = historical.data;
-            this.country.info.population = population.data.population;
-        })).finally(() => this.loaded = true);
+        this.axios.all([infoUrl, infoYesterdayUrl, historicalUrl, populationUrl])
+            .then(this.axios.spread((info, infoYesterday, historical, population) => {
+                this.country.info = info.data;
+                this.country.infoYesterday = infoYesterday.data;
+                this.country.historical = historical.data;
+                this.country.info.population = population.data.population;
+            })).finally(() => this.loaded = true);
 
         if (countryCode == 'US') {
             const statesUrl = `https://corona.lmao.ninja/states`;
@@ -212,6 +236,14 @@ export default {
             });
 
             return chartData;
+        },
+
+        todayActive: function () {
+            return this.country.info.active - this.country.infoYesterday.active;
+        },
+
+        todayRecovered: function () {
+            return this.country.info.recovered - this.country.infoYesterday.recovered;
         }
     }
 }
