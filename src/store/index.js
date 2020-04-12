@@ -43,8 +43,8 @@ export default new Vuex.Store({
         fetch_global_data ({commit}) {
             commit('set_global_loaded', false);
 
-            const totalsUrl = Vue.axios.get('https://corona.lmao.ninja/all');
-            const yesterdayTotalsUrl = Vue.axios.get('https://corona.lmao.ninja/yesterday/all');
+            const totalsUrl = Vue.axios.get('https://corona.lmao.ninja/v2/all');
+            const yesterdayTotalsUrl = Vue.axios.get('https://corona.lmao.ninja/v2/all?yesterday=true');
             const historicalUrl = Vue.axios.get('https://corona.lmao.ninja/v2/historical/all');
 
             Vue.axios.all([totalsUrl, yesterdayTotalsUrl, historicalUrl]).then(Vue.axios.spread((totals, yesterdayTotals, historical) => {
@@ -59,7 +59,7 @@ export default new Vuex.Store({
         fetch_countries_data ({commit, state}) {
             commit('set_countries_loaded', false);
 
-            const countriesUrl = 'https://corona.lmao.ninja/countries?sort=cases';
+            const countriesUrl = 'https://corona.lmao.ninja/v2/countries?sort=cases';
 
             Vue.axios.get(countriesUrl).then(res => {
                 commit('set_countries_data', res.data);

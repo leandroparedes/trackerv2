@@ -183,7 +183,7 @@ export default {
         this.loaded = false;
 
         const countryCode = this.$route.params.countryCode;
-        const infoUrl = this.axios.get(`https://corona.lmao.ninja/countries/${countryCode}`).catch(err => err);
+        const infoUrl = this.axios.get(`https://corona.lmao.ninja/v2/countries/${countryCode}`).catch(err => err);
         const infoYesterdayUrl = this.axios.get(`https://corona.lmao.ninja/v2/countries/${countryCode}?yesterday=true`).catch(err => err);
         const historicalUrl =  this.axios.get(`https://corona.lmao.ninja/v2/historical/${countryCode}?lastdays=all`).catch(err => err);
         const populationUrl = this.axios.get(`https://restcountries.eu/rest/v2/alpha/${countryCode}?fields=population`).catch(err => err);
